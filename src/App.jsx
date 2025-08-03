@@ -1,21 +1,21 @@
 import { useState } from "react";
 import WalletConnect from "./components/WalletConnect";
+import TokenPoolInfo from "./components/TokenPoolInfo";
 
 function App() {
   const [account, setAccount] = useState(null);
+  const [provider, setProvider] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
-      <h1 className="text-3xl font-bold mb-6">🌱 GreenLeaf Presale</h1>
+    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex flex-col items-center justify-start p-6">
+      <h1 className="text-3xl font-bold mb-6">🌱 GLF Token Presale</h1>
 
-      {/* Wallet Connect */}
-      <WalletConnect onConnect={setAccount} />
+      <WalletConnect setAccount={setAccount} setProvider={setProvider} />
 
-      {/* Show address if connected */}
-      {account && (
-        <p className="mt-4 text-green-400">
-          Connected: {account.slice(0, 6)}...{account.slice(-4)}
-        </p>
+      {account && provider && (
+        <>
+          <TokenPoolInfo account={account} provider={provider} />
+        </>
       )}
     </div>
   );
