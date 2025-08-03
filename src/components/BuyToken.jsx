@@ -1,23 +1,17 @@
 import { useState } from "react";
-import { BrowserProvider, Contract, parseUnits } from "ethers";
+import { Contract, parseUnits } from "ethers";
 import presaleAbi from "../abis/PresaleABI.json";
-import usdtAbi from "../abis/USDTABI.json";
+import erc20Abi from "../abis/ERC20.json"; // USDT is ERC20 standard
 import { PRESALE_CONTRACT_ADDRESS, USDT_TOKEN_ADDRESS } from "../utils/constants";
-import Notification from "./Notification";
 
-const BuyToken = ({ account }) => {
+const BuyToken = ({ account, provider }) => {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleBuy = async () => {
-    if (!window.ethereum) {
-      setMessage("MetaMask not detected");
-      return;
-    }
-
-    if (!account) {
-      setMessage("Wallet not connected");
+    if (!amount || isNaN(amount)) {
+      setMessage("❌ Please enter a valid amount.");
       return;
     }
 
@@ -25,24 +19,21 @@ const BuyToken = ({ account }) => {
       setLoading(true);
       setMessage("");
 
-      const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-
-      const usdt = new Contract(USDT_TOKEN_ADDRESS, usdtAbi, signer);
+      const usdt = new Contract(USDT_TOKEN_ADDRESS, erc20Abi, signer);
       const presale = new Contract(PRESALE_CONTRACT_ADDRESS, presaleAbi, signer);
 
       const usdtAmount = parseUnits(amount, 6); // USDT has 6 decimals
 
-      const allowance = await usdt.allowance(account, PRESALE_CONTRACT_ADDRESS);
-      if (allowance < usdtAmount) {
-        const approveTx = await usdt.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
-        await approveTx.wait();
-      }
+      // Step 1: Approve USDT to Presale Contract
+      const approveTx = await usdt.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
+      await approveTx.wait();
 
+      // Step 2: Buy Tokens
       const buyTx = await presale.buyTokens(usdtAmount);
       await buyTx.wait();
 
-      setMessage("✅ GLF tokens purchased successfully!");
+      setMessage("✅ Purchase successful!");
       setAmount("");
     } catch (err) {
       console.error(err);
@@ -53,24 +44,23 @@ const BuyToken = ({ account }) => {
   };
 
   return (
-    <div className="bg-zinc-900 p-6 rounded-2xl shadow-xl w-full max-w-md text-white">
-      <h2 className="text-xl font-semibold mb-4">Buy GLF Tokens</h2>
+    <div className="bg-zinc-800 p-4 rounded-xl shadow-lg mt-6 w-full max-w-md">
+      <h2 className="text-xl font-semibold mb-2">Buy GLF Tokens</h2>
       <input
         type="number"
+        placeholder="Enter USDT amount"
+        className="w-full p-2 rounded bg-zinc-700 text-white mb-2"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Amount in USDT"
-        className="w-full p-2 rounded mb-4 bg-zinc-800 border border-zinc-700 text-white"
       />
       <button
         onClick={handleBuy}
-        disabled={loading || !amount}
-        className="bg-green-500 hover:bg-green-600 w-full py-2 rounded text-white font-semibold disabled:opacity-50"
+        disabled={loading}
+        className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white w-full"
       >
-        {loading ? "Processing..." : "Buy"}
+        {loading ? "Processing..." : "Buy Tokens"}
       </button>
-
-      {message && <Notification message={message} />}
+      {message && <p className="mt-2 text-sm">{message}</p>}
     </div>
   );
 };
