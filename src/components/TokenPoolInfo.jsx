@@ -9,18 +9,35 @@ export default function TokenPoolInfo() {
   useEffect(() => {
     const fetchAvailableTokens = async () => {
       if (!window.ethereum) return;
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
-      const tokens = await contract.getAvailableTokens();
-      setAvailableTokens(ethers.utils.formatUnits(tokens, 18)); // Assuming GLF has 18 decimals
+
+      try {
+        const tokens = await contract.getAvailableTokens();
+        setAvailableTokens(ethers.utils.formatUnits(tokens, 18));
+      } catch (error) {
+        console.error("Failed to fetch tokens:", error);
+        setAvailableTokens("Error");
+      }
     };
 
     fetchAvailableTokens();
   }, []);
 
-  if (availableTokens === null) return <p>Loading...</p>;
-
   return (
-    <p className="text-white mb-4">Available Tokens: {availableTokens}</p>
+    <div className="bg-green-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 max-w-md mx-auto mt-6 border border-green-400/30">
+      <h2 className="text-xl font-bold text-center text-white mb-2">
+        Presale Token Pool
+      </h2>
+
+      {availableTokens === null ? (
+        <p className="text-yellow-300 text-center">Loading available tokens...</p>
+      ) : (
+        <p className="text-lg text-white text-center">
+          <span className="font-semibold">{availableTokens}</span> GLF Available
+        </p>
+      )}
+    </div>
   );
 }
