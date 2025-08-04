@@ -1,39 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useContract } from "../hooks/useContract";
 import { ethers } from "ethers";
+import { useContract } from "../hooks/useContract";
+import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
 
 const TokenPoolInfo = ({ account }) => {
-  const contract = useContract();
-  const [poolAmount, setPoolAmount] = useState(null);
-  const [error, setError] = useState("");
+  const [availableTokens, setAvailableTokens] = useState(null);
+  const contract = useContract(PRESALE_CONTRACT_ADDRESS);
 
   useEffect(() => {
-    const fetchTokenPool = async () => {
-      if (!contract || !account) return;
+    const fetchPoolInfo = async () => {
+      if (!contract) return;
 
       try {
         const result = await contract.getAvailableTokens();
-        const formatted = ethers.utils.formatUnits(result, 18);
-        setPoolAmount(formatted);
-        setError("");
+        setAvailableTokens(ethers.utils.formatUnits(result, 18));
       } catch (err) {
-        console.error("Error fetching pool info:", err);
-        setError("Failed to fetch token pool info.");
+        console.error("Error fetching token pool info:", err);
       }
     };
 
-    fetchTokenPool();
-  }, [account, contract]);
+    fetchPoolInfo();
+  }, [contract]);
 
   return (
-    <div className="bg-gray-800 p-4 rounded-xl shadow-lg mt-4 text-white">
-      <h2 className="text-xl font-semibold mb-2">Token Pool</h2>
-      {error ? (
-        <p className="text-red-400">{error}</p>
-      ) : poolAmount === null ? (
-        <p>Loading...</p>
+    <div className="text-white text-center mt-4">
+      {availableTokens ? (
+        <p>Available Tokens in Pool: <span className="font-bold">{availableTokens} GLF</span></p>
       ) : (
-        <p className="text-lg">{poolAmount} GLF tokens available</p>
+        <p>Loading token pool info...</p>
       )}
     </div>
   );
