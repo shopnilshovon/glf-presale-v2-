@@ -1,4 +1,3 @@
-// src/components/TokenPoolInfo.jsx
 import React, { useEffect, useState } from "react";
 import { useContract } from "../hooks/useContract";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
