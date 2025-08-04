@@ -1,45 +1,45 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import ABI from "../abis/PresaleABI.json";
+import PresaleABI from "../abis/PresaleABI.json";
+import useContract from "../hooks/useContract";
 
-export default function TokenPoolInfo() {
+const TokenPoolInfo = ({ account }) => {
+  const contract = useContract(PRESALE_CONTRACT_ADDRESS, PresaleABI);
   const [availableTokens, setAvailableTokens] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchAvailableTokens = async () => {
-      if (!window.ethereum) return;
-
-      setLoading(true);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
+      if (!contract) return;
 
       try {
+        setLoading(true);
         const tokens = await contract.getAvailableTokens();
         setAvailableTokens(ethers.utils.formatUnits(tokens, 18));
       } catch (error) {
-        console.error("Failed to fetch tokens:", error);
-        setAvailableTokens("Error");
+        console.error("Error fetching token pool info:", error);
+        setAvailableTokens(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchAvailableTokens();
-  }, []);
+  }, [contract]);
 
+  // ⬇️ ⬇️ ⬇️ Just replace this whole return section:
   return (
     <div className="w-full px-4">
       <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
 
         {/* Glowing Header */}
-        <div className="absolute -top-3 left-4 bg-gradient-to-r from-green-500 via-green-300 to-green-500 text-black px-3 py-1 rounded-b-xl font-semibold text-xs sm:text-sm tracking-wide shadow-md">
+        <div className="relative z-10 inline-block bg-gradient-to-r from-green-500 via-green-300 to-green-500 text-black px-4 py-1 rounded-b-xl font-semibold text-xs sm:text-sm tracking-wide shadow-md mb-4">
           🌱 GLF TOKEN POOL
         </div>
 
         {/* Main content */}
-        <div className="flex flex-col items-center justify-center text-center mt-6 sm:mt-8">
+        <div className="flex flex-col items-center justify-center text-center mt-4 sm:mt-6">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-6">
               <div className="w-5 h-5 sm:w-6 sm:h-6 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
@@ -60,4 +60,6 @@ export default function TokenPoolInfo() {
       </div>
     </div>
   );
-}
+};
+
+export default TokenPoolInfo;
