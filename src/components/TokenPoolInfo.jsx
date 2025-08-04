@@ -33,7 +33,7 @@ export default function TokenPoolInfo() {
     <div className="w-full px-4">
       <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
 
-        {/* Glowing Top Title */}
+        {/* Glowing Header */}
         <div className="absolute -top-3 left-4 bg-gradient-to-r from-green-500 via-green-300 to-green-500 text-black px-3 py-1 rounded-b-xl font-semibold text-xs sm:text-sm tracking-wide shadow-md">
           🌱 GLF TOKEN POOL
         </div>
@@ -47,8 +47,10 @@ export default function TokenPoolInfo() {
             </div>
           ) : (
             <>
-              <p className="text-xs sm:text-sm text-green-200 uppercase tracking-widest mb-1">Available</p>
-              <p className="text-3xl sm:text-5xl font-bold text-white drop-shadow-md break-words">
+              <p className="text-xs sm:text-sm text-green-200 uppercase tracking-widest mb-1">
+                Available
+              </p>
+              <p className="text-3xl sm:text-5xl font-bold text-white drop-shadow-md break-words max-w-[90%] sm:max-w-full">
                 {availableTokens ?? "--"}{" "}
                 <span className="text-green-400 font-semibold tracking-tight">GLF</span>
               </p>
