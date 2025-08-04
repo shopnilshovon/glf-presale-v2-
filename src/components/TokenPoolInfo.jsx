@@ -30,25 +30,28 @@ export default function TokenPoolInfo() {
   }, []);
 
   return (
-    <div className="bg-green-800/60 border border-green-400/20 backdrop-blur-md rounded-xl shadow-md w-full max-w-sm mx-auto mt-6 p-4">
-      <h2 className="text-xl font-semibold text-center text-green-100 mb-3">
-        🌿 <span className="text-green-300">Token Pool</span>
-      </h2>
+    <div className="w-full px-4">
+      <div className="bg-green-800/70 border border-green-400/30 backdrop-blur-sm rounded-2xl shadow-lg p-5 flex flex-col items-center text-center">
+        <div className="flex items-center gap-2 text-lg font-semibold text-green-300 mb-2">
+          <span>🌿</span>
+          <span>Token Pool</span>
+        </div>
 
-      {loading ? (
-        <div className="flex flex-col items-center justify-center py-4">
-          <div className="w-5 h-5 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm text-green-200 mt-2">Loading...</p>
-        </div>
-      ) : (
-        <div className="text-center">
-          <p className="text-xs text-green-200 mb-1 uppercase tracking-widest">Available</p>
-          <p className="text-3xl font-bold text-white">
-            {availableTokens ?? "--"}{" "}
-            <span className="text-green-300 font-semibold">GLF</span>
-          </p>
-        </div>
-      )}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-4">
+            <div className="w-5 h-5 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm text-green-200 mt-2">Loading...</p>
+          </div>
+        ) : (
+          <>
+            <p className="text-xs text-green-200 uppercase tracking-widest mb-1">Available</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-white">
+              {availableTokens ?? "--"}{" "}
+              <span className="text-green-300 font-bold tracking-tight">GLF</span>
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
