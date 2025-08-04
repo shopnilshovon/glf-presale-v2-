@@ -3,7 +3,7 @@ import Notification from "./Notification";
 
 export default function WalletConnect({ onConnected }) {
   const [account, setAccount] = useState(null);
-  const [notification, setNotification] = useState(null); // holds {type, message}
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -25,9 +25,7 @@ export default function WalletConnect({ onConnected }) {
 
   const showNotification = (type, message) => {
     setNotification({ type, message });
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
+    setTimeout(() => setNotification(null), 3000);
   };
 
   const switchToPolygon = async () => {
@@ -93,19 +91,21 @@ export default function WalletConnect({ onConnected }) {
   };
 
   return (
-    <div className="mb-4 text-white">
+    <div className="mb-6 text-white w-full flex justify-center">
       {notification && (
-        <Notification type={notification.type} message={notification.message} />
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center z-50">
+          <Notification type={notification.type} message={notification.message} />
+        </div>
       )}
 
       {account ? (
-        <div className="flex items-center gap-4">
-          <span className="text-sm">
-            Connected: {account.slice(0, 6)}...{account.slice(-4)}
+        <div className="flex flex-col items-center md:flex-row md:gap-4 bg-gradient-to-r from-green-800 to-green-600 px-4 py-2 rounded-xl shadow-lg">
+          <span className="text-sm font-mono tracking-wide">
+            ✅ Connected: {account.slice(0, 6)}...{account.slice(-4)}
           </span>
           <button
             onClick={disconnectWallet}
-            className="bg-red-600 px-3 py-1 rounded"
+            className="mt-2 md:mt-0 bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-full text-sm shadow-md transition"
           >
             Disconnect
           </button>
@@ -113,9 +113,9 @@ export default function WalletConnect({ onConnected }) {
       ) : (
         <button
           onClick={connectWallet}
-          className="bg-green-600 px-4 py-2 rounded"
+          className="bg-gradient-to-r from-green-500 to-lime-500 text-white font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transition transform duration-200"
         >
-          Connect Wallet
+          🔗 Connect Wallet
         </button>
       )}
     </div>
