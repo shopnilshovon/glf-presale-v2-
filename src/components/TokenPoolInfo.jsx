@@ -31,15 +31,15 @@ export default function TokenPoolInfo() {
 
   return (
     <div className="w-full px-4">
-      <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
+      <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-2xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
 
-        {/* Glowing Header */}
-        <div className="relative z-10 inline-block bg-gradient-to-r from-green-500 via-green-300 to-green-500 text-black px-4 py-1 rounded-b-xl font-semibold text-xs sm:text-sm tracking-wide shadow-md mb-4">
+        {/* Header */}
+        <h2 className="text-center text-xs sm:text-sm tracking-wider font-semibold bg-gradient-to-r from-green-400 via-green-300 to-green-400 text-black px-5 py-1 rounded-b-xl shadow mb-4 inline-block">
           🌱 GLF TOKEN POOL
-        </div>
+        </h2>
 
-        {/* Main content */}
-        <div className="flex flex-col items-center justify-center text-center mt-4 sm:mt-6">
+        {/* Content */}
+        <div className="text-center">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-6">
               <div className="w-5 h-5 sm:w-6 sm:h-6 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
@@ -47,12 +47,12 @@ export default function TokenPoolInfo() {
             </div>
           ) : (
             <>
-              <p className="text-xs sm:text-sm text-green-200 uppercase tracking-widest mb-1">
+              <p className="text-green-300 text-sm sm:text-base tracking-wide mb-1">
                 Available
               </p>
-              <p className="text-3xl sm:text-5xl font-bold text-white drop-shadow-md break-words max-w-[90%] sm:max-w-full">
+              <p className="text-3xl sm:text-5xl font-bold text-white drop-shadow-lg">
                 {availableTokens ?? "--"}{" "}
-                <span className="text-green-400 font-semibold tracking-tight">GLF</span>
+                <span className="text-green-400 font-semibold">GLF</span>
               </p>
             </>
           )}
