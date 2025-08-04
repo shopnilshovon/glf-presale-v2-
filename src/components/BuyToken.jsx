@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ethers } from "ethers";
 import { USDT_TOKEN_ADDRESS, PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import ABI from "../abis/PresaleABI.json";
+import PresaleABI from "../abis/PresaleABI.json";
 
 export default function BuyToken({ account, setNotification }) {
-  const [amount, setAmount] = useState("");
+  const [glfAmount, setGlfAmount] = useState("");
 
   const buy = async () => {
     if (!account) {
@@ -16,65 +16,64 @@ export default function BuyToken({ account, setNotification }) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      const usdt = new ethers.Contract(
+      // USDT Contract to approve spending
+      const usdtContract = new ethers.Contract(
         USDT_TOKEN_ADDRESS,
         [
-          "function approve(address spender, uint amount) public returns (bool)",
-          "function allowance(address owner, address spender) public view returns (uint)"
+          "function approve(address spender, uint256 amount) external returns (bool)",
+          "function allowance(address owner, address spender) external view returns (uint256)",
         ],
         signer
       );
 
-      const presale = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, signer);
+      // Presale Contract instance
+      const presaleContract = new ethers.Contract(
+        PRESALE_CONTRACT_ADDRESS,
+        PresaleABI,
+        signer
+      );
 
-      const usdtAmount = ethers.utils.parseUnits(amount, 6);
+      // GLF amount entered by user (assumed as decimal GLF tokens)
+      // Convert to wei (18 decimals)
+      const glfAmountWei = ethers.utils.parseUnits(glfAmount || "0", 18);
 
-      const allowance = await usdt.allowance(account, PRESALE_CONTRACT_ADDRESS);
-      console.log("Current Allowance:", allowance.toString());
+      // Calculate required USDT amount = (glfAmountWei * 50000) / 1e18
+      const usdtAmount = glfAmountWei.mul(50000).div(ethers.utils.parseUnits("1", 18));
+
+      // Check allowance first
+      const allowance = await usdtContract.allowance(account, PRESALE_CONTRACT_ADDRESS);
 
       if (allowance.lt(usdtAmount)) {
-        const tx1 = await usdt.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
-        await tx1.wait();
-        console.log("Approval confirmed");
-
-        // Wait for allowance update
-        let tries = 0;
-        while (tries < 5) {
-          const newAllowance = await usdt.allowance(account, PRESALE_CONTRACT_ADDRESS);
-          if (newAllowance.gte(usdtAmount)) {
-            break;
-          }
-          console.log("Waiting for allowance to reflect...");
-          await new Promise((res) => setTimeout(res, 1000));
-          tries++;
-        }
+        const approveTx = await usdtContract.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
+        await approveTx.wait();
       }
 
-      const tx2 = await presale.buyTokens(usdtAmount);
-      await tx2.wait();
-      console.log("Buy successful");
+      // Call buyTokens with GLF amount in wei
+      const buyTx = await presaleContract.buyTokens(glfAmountWei);
+      await buyTx.wait();
 
       setNotification({ type: "success", message: "Token purchase successful!" });
-      setAmount("");
-    } catch (err) {
-      console.error("Buy Error:", err);
-      const reason = err.reason || err.data?.message || err.message || "Unknown error";
-      setNotification({ type: "error", message: `Purchase failed: ${reason}` });
+      setGlfAmount("");
+    } catch (error) {
+      console.error("Purchase error:", error);
+      setNotification({ type: "error", message: "Purchase failed." });
     }
   };
 
   return (
     <div className="mb-4">
       <input
-        type="text"
-        placeholder="Amount in USDT"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="px-4 py-2 mr-2 rounded"
+        type="number"
+        step="0.0001"
+        min="0"
+        placeholder="Amount of GLF to buy"
+        value={glfAmount}
+        onChange={(e) => setGlfAmount(e.target.value)}
+        className="px-4 py-2 mr-2 rounded text-black"
       />
       <button
         onClick={buy}
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
       >
         Buy
       </button>
