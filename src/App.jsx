@@ -4,6 +4,8 @@ import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
 
+// Triggering Vercel rebuild with this comment
+
 export default function App() {
   const [account, setAccount] = useState(null);
   const [notification, setNotification] = useState(null);
