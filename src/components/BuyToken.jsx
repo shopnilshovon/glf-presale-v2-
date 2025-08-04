@@ -1,68 +1,59 @@
 import { useState } from "react";
 import { ethers } from "ethers";
+import { USDT_TOKEN_ADDRESS } from "../utils/constants";
 import { useContract } from "../hooks/useContract";
-import { USDT_TOKEN_ADDRESS, PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import { useNotification } from "./Notification";
+import ABI from "../abis/PresaleABI.json";
 
-const BuyToken = ({ account }) => {
+export default function BuyToken({ account, setNotification }) {
   const [amount, setAmount] = useState("");
-  const [loading, setLoading] = useState(false);
-  const presaleContract = useContract(PRESALE_CONTRACT_ADDRESS, "presale");
-  const usdtContract = useContract(USDT_TOKEN_ADDRESS, "usdt");
-  const { notifySuccess, notifyError } = useNotification();
+  const contract = useContract();
 
-  const handleBuy = async () => {
-    if (!account) {
-      notifyError("Wallet not connected");
-      return;
-    }
-
-    if (!amount || isNaN(amount) || Number(amount) <= 0) {
-      notifyError("Enter a valid GLF amount");
-      return;
-    }
-
+  const buy = async () => {
+    if (!account) return setNotification({ type: "error", message: "Wallet not connected" });
     try {
-      setLoading(true);
-      const usdtAmount = ethers.parseUnits((amount * 0.05).toString(), 6); // 1 GLF = 0.05 USDT
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
-      // Step 1: Approve USDT
-      const approveTx = await usdtContract.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
-      await approveTx.wait();
+      const usdt = new ethers.Contract(
+        USDT_TOKEN_ADDRESS,
+        [
+          "function approve(address spender, uint amount) public returns (bool)",
+          "function allowance(address owner, address spender) public view returns (uint)"
+        ],
+        signer
+      );
 
-      // Step 2: Buy GLF tokens
-      const buyTx = await presaleContract.buyTokens(ethers.parseUnits(amount, 18));
-      await buyTx.wait();
+      const usdtAmount = ethers.utils.parseUnits(amount, 6);
 
-      notifySuccess("Purchase successful!");
+      const allowance = await usdt.allowance(account, contract.address);
+      if (allowance.lt(usdtAmount)) {
+        const tx1 = await usdt.approve(contract.address, usdtAmount);
+        await tx1.wait();
+      }
+
+      const tx2 = await contract.buyTokens(usdtAmount);
+      await tx2.wait();
+
+      setNotification({ type: "success", message: "Token purchase successful!" });
       setAmount("");
-    } catch (error) {
-      console.error(error);
-      notifyError("Transaction failed");
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setNotification({ type: "error", message: "Purchase failed." });
     }
   };
 
   return (
-    <div className="bg-zinc-900 p-4 rounded-2xl shadow-lg w-full max-w-md">
-      <h2 className="text-xl font-bold mb-2">Buy GLF Tokens</h2>
+    <div className="mb-4">
       <input
-        type="number"
-        placeholder="Enter GLF amount"
-        className="w-full p-2 rounded bg-zinc-800 text-white border border-zinc-700"
+        type="text"
+        placeholder="Amount in USDT"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
+        className="px-4 py-2 mr-2 rounded"
       />
-      <button
-        onClick={handleBuy}
-        disabled={loading}
-        className="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition"
-      >
-        {loading ? "Processing..." : "Buy"}
+      <button onClick={buy} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        Buy
       </button>
     </div>
   );
-};
-
-export default BuyToken;
+}
