@@ -16,23 +16,19 @@ export default function BuyToken({ account, setNotification }) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      // USDT Contract (approve & allowance)
       const usdt = new ethers.Contract(
         USDT_TOKEN_ADDRESS,
         [
-          "function approve(address spender, uint amount) public returns (bool)",
+          "function approve(address spender, uint256 amount) public returns (bool)",
           "function allowance(address owner, address spender) public view returns (uint256)"
         ],
         signer
       );
 
-      // Presale Contract
       const presale = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, signer);
 
-      // ইউজার যে USDT এর পরিমাণ ইনপুট দিয়েছে, সেটা 6 দশমিক সহ parse করা
-      const usdtAmount = ethers.utils.parseUnits(amount, 6);
+      const usdtAmount = ethers.utils.parseUnits(amount, 6); // USDT decimals 6
 
-      // আগে দেখো কতটা USDT অ্যাপ্রুভ করা আছে
       const allowance = await usdt.allowance(account, PRESALE_CONTRACT_ADDRESS);
 
       if (allowance.lt(usdtAmount)) {
@@ -40,7 +36,6 @@ export default function BuyToken({ account, setNotification }) {
         await approveTx.wait();
       }
 
-      // তারপর বায় টোকেন ট্রানজেকশন
       const buyTx = await presale.buyTokens(usdtAmount);
       await buyTx.wait();
 
@@ -48,7 +43,10 @@ export default function BuyToken({ account, setNotification }) {
       setAmount("");
     } catch (error) {
       console.error("Purchase failed:", error);
-      setNotification({ type: "error", message: "Purchase failed. " + (error?.data?.message || error.message) });
+      setNotification({
+        type: "error",
+        message: "Purchase failed. " + (error?.data?.message || error.message),
+      });
     }
   };
 
