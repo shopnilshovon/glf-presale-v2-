@@ -1,26 +1,43 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { formatUnits } from "ethers";
+import useContract from "../hooks/useContract";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import ABI from "../abis/PresaleABI.json";
+import PresaleABI from "../abis/PresaleABI.json";
 
-export default function TokenPoolInfo() {
+export default function TokenPoolInfo({ account }) {
   const [availableTokens, setAvailableTokens] = useState(null);
+  const [tokenPrice, setTokenPrice] = useState(null);
+  const presaleContract = useContract(PRESALE_CONTRACT_ADDRESS, PresaleABI);
 
   useEffect(() => {
-    const fetchAvailableTokens = async () => {
-      if (!window.ethereum) return;
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
-      const tokens = await contract.getAvailableTokens();
-      setAvailableTokens(ethers.utils.formatUnits(tokens, 18)); // Assuming GLF has 18 decimals
+    const fetchData = async () => {
+      if (!presaleContract) return;
+
+      try {
+        const tokens = await presaleContract.getAvailableTokens();
+        const price = await presaleContract.tokenPrice();
+
+        setAvailableTokens(formatUnits(tokens, 18));
+        setTokenPrice(formatUnits(price, 6)); // token price is in USDT (6 decimals)
+      } catch (error) {
+        console.error("Error fetching presale data:", error);
+      }
     };
 
-    fetchAvailableTokens();
-  }, []);
-
-  if (availableTokens === null) return <p>Loading...</p>;
+    fetchData();
+  }, [presaleContract, account]);
 
   return (
-    <p className="text-white mb-4">Available Tokens: {availableTokens}</p>
+    <div className="bg-gray-800 p-4 rounded-xl shadow-md text-white mb-4">
+      <h2 className="text-xl font-semibold mb-2">Presale Pool Info</h2>
+      {availableTokens === null || tokenPrice === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="space-y-2">
+          <p>Available GLF Tokens: <span className="font-bold">{availableTokens}</span></p>
+          <p>Current Token Price: <span className="font-bold">{tokenPrice} USDT</span></p>
+        </div>
+      )}
+    </div>
   );
 }
