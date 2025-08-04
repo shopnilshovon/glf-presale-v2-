@@ -1,7 +1,7 @@
-import { toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
-export const useNotification = () => {
-  const notifySuccess = (msg) => toast.success(msg);
-  const notifyError = (msg) => toast.error(msg);
-  return { notifySuccess, notifyError };
+const Notification = () => {
+  return <Toaster position="top-center" />;
 };
+
+export default Notification;
