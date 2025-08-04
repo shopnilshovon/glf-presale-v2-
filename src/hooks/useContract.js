@@ -1,30 +1,25 @@
 import { useEffect, useState } from "react";
-import { Contract, BrowserProvider } from "ethers";
-import presaleAbi from "../abis/PresaleABI.json";
+import { ethers } from "ethers";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
+import PresaleABI from "../abis/PresaleABI.json";
 
-const useContract = (account) => {
+export default function useContract() {
   const [contract, setContract] = useState(null);
-  const [provider, setProvider] = useState(null);
 
   useEffect(() => {
-    const init = async () => {
-      if (window.ethereum && account) {
-        const browserProvider = new BrowserProvider(window.ethereum);
-        const signer = await browserProvider.getSigner();
-        const presaleContract = new Contract(PRESALE_CONTRACT_ADDRESS, presaleAbi, signer);
-        setContract(presaleContract);
-        setProvider(browserProvider);
-      } else {
-        setContract(null);
-        setProvider(null);
-      }
-    };
+    if (typeof window !== "undefined" && window.ethereum) {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = provider.getSigner();
 
-    init();
-  }, [account]);
+      const contractInstance = new ethers.Contract(
+        PRESALE_CONTRACT_ADDRESS,
+        PresaleABI,
+        signer
+      );
 
-  return { contract, provider };
-};
+      setContract(contractInstance);
+    }
+  }, []);
 
-export default useContract;
+  return contract;
+}
