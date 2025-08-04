@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ethers } from "ethers";
 import { USDT_TOKEN_ADDRESS, PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import PresaleABI from "../abis/PresaleABI.json";
+import ABI from "../abis/PresaleABI.json";
 
 export default function BuyToken({ account, setNotification }) {
-  const [glfAmount, setGlfAmount] = useState("");
+  const [amount, setAmount] = useState("");
 
   const buy = async () => {
     if (!account) {
@@ -16,64 +16,54 @@ export default function BuyToken({ account, setNotification }) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      // USDT Contract to approve spending
-      const usdtContract = new ethers.Contract(
+      // USDT Contract (approve & allowance)
+      const usdt = new ethers.Contract(
         USDT_TOKEN_ADDRESS,
         [
-          "function approve(address spender, uint256 amount) external returns (bool)",
-          "function allowance(address owner, address spender) external view returns (uint256)",
+          "function approve(address spender, uint amount) public returns (bool)",
+          "function allowance(address owner, address spender) public view returns (uint256)"
         ],
         signer
       );
 
-      // Presale Contract instance
-      const presaleContract = new ethers.Contract(
-        PRESALE_CONTRACT_ADDRESS,
-        PresaleABI,
-        signer
-      );
+      // Presale Contract
+      const presale = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, signer);
 
-      // GLF amount entered by user (assumed as decimal GLF tokens)
-      // Convert to wei (18 decimals)
-      const glfAmountWei = ethers.utils.parseUnits(glfAmount || "0", 18);
+      // ইউজার যে USDT এর পরিমাণ ইনপুট দিয়েছে, সেটা 6 দশমিক সহ parse করা
+      const usdtAmount = ethers.utils.parseUnits(amount, 6);
 
-      // Calculate required USDT amount = (glfAmountWei * 50000) / 1e18
-      const usdtAmount = glfAmountWei.mul(50000).div(ethers.utils.parseUnits("1", 18));
-
-      // Check allowance first
-      const allowance = await usdtContract.allowance(account, PRESALE_CONTRACT_ADDRESS);
+      // আগে দেখো কতটা USDT অ্যাপ্রুভ করা আছে
+      const allowance = await usdt.allowance(account, PRESALE_CONTRACT_ADDRESS);
 
       if (allowance.lt(usdtAmount)) {
-        const approveTx = await usdtContract.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
+        const approveTx = await usdt.approve(PRESALE_CONTRACT_ADDRESS, usdtAmount);
         await approveTx.wait();
       }
 
-      // Call buyTokens with GLF amount in wei
-      const buyTx = await presaleContract.buyTokens(glfAmountWei);
+      // তারপর বায় টোকেন ট্রানজেকশন
+      const buyTx = await presale.buyTokens(usdtAmount);
       await buyTx.wait();
 
       setNotification({ type: "success", message: "Token purchase successful!" });
-      setGlfAmount("");
+      setAmount("");
     } catch (error) {
-      console.error("Purchase error:", error);
-      setNotification({ type: "error", message: "Purchase failed." });
+      console.error("Purchase failed:", error);
+      setNotification({ type: "error", message: "Purchase failed. " + (error?.data?.message || error.message) });
     }
   };
 
   return (
     <div className="mb-4">
       <input
-        type="number"
-        step="0.0001"
-        min="0"
-        placeholder="Amount of GLF to buy"
-        value={glfAmount}
-        onChange={(e) => setGlfAmount(e.target.value)}
-        className="px-4 py-2 mr-2 rounded text-black"
+        type="text"
+        placeholder="Amount in USDT"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        className="px-4 py-2 mr-2 rounded"
       />
       <button
         onClick={buy}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
       >
         Buy
       </button>
