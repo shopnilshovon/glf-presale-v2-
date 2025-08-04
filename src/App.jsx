@@ -1,24 +1,34 @@
 import { useState } from "react";
 import WalletConnect from "./components/WalletConnect";
 import TokenPoolInfo from "./components/TokenPoolInfo";
+import BuyToken from "./components/BuyToken";
+import Notification from "./components/Notification";
 
-function App() {
+export default function App() {
   const [account, setAccount] = useState(null);
-  const [provider, setProvider] = useState(null);
+  const [notification, setNotification] = useState(null);
+
+  const handleNotification = (notif) => {
+    setNotification(notif);
+    setTimeout(() => setNotification(null), 5000);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex flex-col items-center justify-start p-6">
-      <h1 className="text-3xl font-bold mb-6">🌱 GLF Token Presale</h1>
+    <div className="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
+      <h1 className="text-3xl font-bold text-green-400 mb-6">GLF Token Presale</h1>
 
-      <WalletConnect setAccount={setAccount} setProvider={setProvider} />
+      <WalletConnect onConnected={setAccount} />
 
-      {account && provider && (
-        <>
-          <TokenPoolInfo account={account} provider={provider} />
-        </>
+      <TokenPoolInfo account={account} />
+
+      <BuyToken
+        account={account}
+        setNotification={handleNotification}
+      />
+
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
       )}
     </div>
   );
 }
-
-export default App;
