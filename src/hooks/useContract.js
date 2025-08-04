@@ -1,25 +1,14 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { ethers } from "ethers";
+import ABI from "../utils/abi.json";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import PresaleABI from "../abis/PresaleABI.json";
 
-export default function useContract() {
-  const [contract, setContract] = useState(null);
+export const useContract = () => {
+  return useMemo(() => {
+    if (typeof window === "undefined" || !window.ethereum) return null;
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = provider.getSigner();
-
-      const contractInstance = new ethers.Contract(
-        PRESALE_CONTRACT_ADDRESS,
-        PresaleABI,
-        signer
-      );
-
-      setContract(contractInstance);
-    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    return new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, signer);
   }, []);
-
-  return contract;
-}
+};
