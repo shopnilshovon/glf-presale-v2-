@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
-import { useContract } from "../hooks/useContract";
+import { ethers } from "ethers";
+import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
+import ABI from "../abis/PresaleABI.json";
 
-export default function TokenPoolInfo({ account }) {
-  const contract = useContract();
-  const [available, setAvailable] = useState(null);
+export default function TokenPoolInfo() {
+  const [availableTokens, setAvailableTokens] = useState(null);
 
   useEffect(() => {
-    const fetchTokens = async () => {
-      if (contract) {
-        const amt = await contract.getAvailableTokens();
-        setAvailable(amt.toString());
-      }
+    const fetchAvailableTokens = async () => {
+      if (!window.ethereum) return;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
+      const tokens = await contract.getAvailableTokens();
+      setAvailableTokens(ethers.utils.formatUnits(tokens, 18)); // Assuming GLF has 18 decimals
     };
-    fetchTokens();
-  }, [contract]);
+
+    fetchAvailableTokens();
+  }, []);
+
+  if (availableTokens === null) return <p>Loading...</p>;
 
   return (
-    <div className="text-white mb-4">
-      <p><strong>Available Tokens:</strong> {available ?? "Loading..."}</p>
-    </div>
+    <p className="text-white mb-4">Available Tokens: {availableTokens}</p>
   );
 }
