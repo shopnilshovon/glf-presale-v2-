@@ -35,7 +35,7 @@ export default function TokenPoolInfo() {
 
         {/* Header */}
         <h2 className="text-center text-xs sm:text-sm tracking-wider font-semibold bg-gradient-to-r from-green-400 via-green-300 to-green-400 text-black px-5 py-1 rounded-b-xl shadow mb-4 inline-block">
-          🌱 GLF TOKEN POOL
+          🌱 GLF TOKEN POOL ROUND 1
         </h2>
 
         {/* Content */}
