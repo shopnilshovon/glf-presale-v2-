@@ -8,7 +8,6 @@ export default function BuyToken({ account, setNotification }) {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [usdtBalance, setUsdtBalance] = useState("0");
-  const [glfBalance, setGlfBalance] = useState("0");
 
   const GLF_PRICE = 0.10; // 1 GLF = 0.10 USDT
 
@@ -21,27 +20,9 @@ export default function BuyToken({ account, setNotification }) {
       ["function balanceOf(address) view returns (uint256)"],
       provider
     );
-    const glf = new ethers.Contract(
-      PRESALE_CONTRACT_ADDRESS,
-      [
-        "function token() view returns (address)",
-        "function getAvailableTokens() public view returns (uint256)"
-      ],
-      provider
-    );
 
     const usdtBal = await usdt.balanceOf(account);
     setUsdtBalance(ethers.utils.formatUnits(usdtBal, 6));
-
-    const glfTokenAddress = await glf.token();
-    const glfToken = new ethers.Contract(
-      glfTokenAddress,
-      ["function balanceOf(address) view returns (uint256)"],
-      provider
-    );
-
-    const glfBal = await glfToken.balanceOf(account);
-    setGlfBalance(ethers.utils.formatUnits(glfBal, 18));
   };
 
   useEffect(() => {
@@ -107,47 +88,51 @@ export default function BuyToken({ account, setNotification }) {
   return (
     <div className="w-full px-4 mt-6">
       <div className="bg-gray-800 rounded-2xl p-5 shadow-lg text-white">
-        <h2 className="text-xl font-bold mb-4 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
+        <h2 className="text-2xl font-bold mb-5 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
 
-        <div className="mb-3 text-sm">
-          <p className="text-gray-400">🎯 USDT Balance:</p>
-          <p className="font-semibold text-green-400">{usdtBalance} USDT</p>
+        {/* USDT Balance */}
+        <div className="mb-6">
+          <p className="text-lg font-medium text-gray-300 mb-1">🎯 USDT Balance:</p>
+          <p className="text-2xl font-bold text-green-400">{usdtBalance} USDT</p>
         </div>
 
-        <div className="mb-3 text-sm">
-          <p className="text-gray-400">💰 Your GLF Balance:</p>
-          <p className="font-semibold text-yellow-400">{glfBalance} GLF</p>
+        {/* Token Rate */}
+        <div className="mb-6">
+          <p className="text-lg font-semibold text-white">
+            🌿 <span className="text-green-300">GLF Token Price</span>
+          </p>
+          <p className="text-xl text-yellow-400 font-bold">1 GLF = 0.10$ USDT</p>
         </div>
 
-        <div className="mb-3 text-sm text-cyan-300">
-          <p>🧾 Rate: <span className="font-semibold text-white">1 GLF = {GLF_PRICE} USDT</span></p>
-        </div>
-
+        {/* Input Field */}
         <input
           type="number"
           min="0"
           placeholder="Enter USDT amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          className="w-full p-2 rounded-lg bg-gray-700 text-white mb-3"
+          className="w-full p-3 rounded-lg bg-gray-700 text-white mb-4 text-lg"
         />
 
-        <div className="mb-3 text-sm text-gray-300">
+        {/* Estimated */}
+        <div className="mb-4 text-base text-gray-300">
           Estimated: <span className="text-yellow-400 font-semibold">{estimateTokens()} GLF</span>
         </div>
 
+        {/* Loading Status */}
         {loading && (
-          <div className="mb-2 text-sm text-blue-400 flex items-center gap-2">
+          <div className="mb-3 text-base text-blue-400 flex items-center gap-2">
             <span className="animate-spin inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full"></span>
             {status === "approve" && "Approving USDT..."}
             {status === "confirming" && "Confirming purchase..."}
           </div>
         )}
 
+        {/* Buy Button */}
         <button
           onClick={buy}
           disabled={loading || !amount}
-          className={`w-full py-2 rounded-lg transition-all duration-300 font-semibold ${
+          className={`w-full py-3 rounded-lg transition-all duration-300 font-semibold text-lg ${
             loading || !amount
               ? "bg-gray-600 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
