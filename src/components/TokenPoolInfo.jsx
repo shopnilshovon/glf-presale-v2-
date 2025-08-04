@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import ABI from "../abis/PresaleABI.json";
+import { useContract } from "../hooks/useContract";
 
 export default function TokenPoolInfo() {
+  const contract = useContract();
   const [availableTokens, setAvailableTokens] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchAvailableTokens = async () => {
-      if (!window.ethereum) return;
+      if (!contract) return;
 
       setLoading(true);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
-
       try {
         const tokens = await contract.getAvailableTokens();
         setAvailableTokens(ethers.utils.formatUnits(tokens, 18));
@@ -27,7 +24,7 @@ export default function TokenPoolInfo() {
     };
 
     fetchAvailableTokens();
-  }, []);
+  }, [contract]);
 
   return (
     <div className="w-full px-4">
@@ -50,7 +47,7 @@ export default function TokenPoolInfo() {
               <p className="text-green-300 text-sm sm:text-base tracking-wide mb-1">
                 Available
               </p>
-              <p className="text-3xl sm:text-5xl font-bold text-white drop-shadow-lg">
+              <p className="text-3xl sm:text-5xl font-bold text-white drop-shadow-lg break-words">
                 {availableTokens ?? "--"}{" "}
                 <span className="text-green-400 font-semibold">GLF</span>
               </p>
