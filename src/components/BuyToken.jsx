@@ -6,7 +6,7 @@ import ABI from "../abis/PresaleABI.json";
 export default function BuyToken({ account, setNotification }) {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(""); // approve / confirming
+  const [status, setStatus] = useState("");
   const [usdtBalance, setUsdtBalance] = useState("0");
 
   const fetchBalance = async () => {
@@ -18,7 +18,7 @@ export default function BuyToken({ account, setNotification }) {
       provider
     );
     const balance = await usdt.balanceOf(account);
-    setUsdtBalance(ethers.utils.formatUnits(balance, 6)); // USDT has 6 decimals
+    setUsdtBalance(ethers.utils.formatUnits(balance, 6));
   };
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function BuyToken({ account, setNotification }) {
 
   const estimateTokens = () => {
     const usdtValue = parseFloat(amount || "0");
-    const rate = 0.05; // 1 GLF = 0.05 USDT
+    const rate = 0.05;
     if (usdtValue && rate) return (usdtValue / rate).toFixed(2);
     return "0.00";
   };
@@ -83,46 +83,48 @@ export default function BuyToken({ account, setNotification }) {
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-2xl shadow-md text-white max-w-md mx-auto">
-      <h2 className="text-xl font-semibold mb-3 text-center">🎯 Buy GLF Tokens</h2>
+    <div className="w-full px-4 mt-6">
+      <div className="bg-gray-800 rounded-2xl p-5 shadow-lg text-white">
+        <h2 className="text-xl font-semibold mb-3 text-center">🎯 Buy GLF Tokens</h2>
 
-      <div className="mb-2 text-sm">
-        <p className="text-gray-400">Your USDT Balance:</p>
-        <p className="font-bold text-green-400">{usdtBalance} USDT</p>
-      </div>
-
-      <input
-        type="number"
-        min="0"
-        placeholder="Enter USDT amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="w-full p-2 rounded-lg bg-gray-700 text-white mb-3"
-      />
-
-      <div className="mb-3 text-sm text-gray-300">
-        Estimated: <span className="text-yellow-400 font-semibold">{estimateTokens()} GLF</span>
-      </div>
-
-      {loading && (
-        <div className="mb-2 text-sm text-blue-400 flex items-center gap-2">
-          <span className="animate-spin inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full"></span>
-          {status === "approve" && "Approving USDT..."}
-          {status === "confirming" && "Confirming purchase..."}
+        <div className="mb-2 text-sm">
+          <p className="text-gray-400">Your USDT Balance:</p>
+          <p className="font-bold text-green-400">{usdtBalance} USDT</p>
         </div>
-      )}
 
-      <button
-        onClick={buy}
-        disabled={loading || !amount}
-        className={`w-full py-2 rounded-lg transition-all duration-300 font-semibold ${
-          loading || !amount
-            ? "bg-gray-600 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700"
-        }`}
-      >
-        {loading ? "Processing..." : "Buy Now"}
-      </button>
+        <input
+          type="number"
+          min="0"
+          placeholder="Enter USDT amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full p-2 rounded-lg bg-gray-700 text-white mb-3"
+        />
+
+        <div className="mb-3 text-sm text-gray-300">
+          Estimated: <span className="text-yellow-400 font-semibold">{estimateTokens()} GLF</span>
+        </div>
+
+        {loading && (
+          <div className="mb-2 text-sm text-blue-400 flex items-center gap-2">
+            <span className="animate-spin inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full"></span>
+            {status === "approve" && "Approving USDT..."}
+            {status === "confirming" && "Confirming purchase..."}
+          </div>
+        )}
+
+        <button
+          onClick={buy}
+          disabled={loading || !amount}
+          className={`w-full py-2 rounded-lg transition-all duration-300 font-semibold ${
+            loading || !amount
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
+        >
+          {loading ? "Processing..." : "Buy Now"}
+        </button>
+      </div>
     </div>
   );
 }
