@@ -1,51 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { useContract } from "../hooks/useContract";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import { toast } from "react-toastify";
-import { Loader2 } from "lucide-react";
+import ABI from "../abis/PresaleABI.json";
 
-const TokenPoolInfo = ({ account }) => {
-  const [available, setAvailable] = useState(null);
+export default function TokenPoolInfo() {
+  const [availableTokens, setAvailableTokens] = useState(null);
   const [loading, setLoading] = useState(false);
-  const contract = useContract(PRESALE_CONTRACT_ADDRESS, "presale");
 
   useEffect(() => {
-    if (!contract) return;
-    const fetchPool = async () => {
+    const fetchAvailableTokens = async () => {
+      if (!window.ethereum) return;
+
+      setLoading(true);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
+
       try {
-        setLoading(true);
-        const result = await contract.getAvailableTokens();
-        const formatted = Number(result) / 1e18;
-        setAvailable(formatted.toFixed(2));
-      } catch (err) {
-        toast.error("Failed to load token pool info.");
-        console.error("Token pool error:", err);
+        const tokens = await contract.getAvailableTokens();
+        setAvailableTokens(ethers.utils.formatUnits(tokens, 18));
+      } catch (error) {
+        console.error("Failed to fetch tokens:", error);
+        setAvailableTokens("Error");
       } finally {
         setLoading(false);
       }
     };
-    fetchPool();
-  }, [contract]);
+
+    fetchAvailableTokens();
+  }, []);
 
   return (
-    <div className="bg-gradient-to-br from-green-700 to-green-600 text-white p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto my-6">
-      <h2 className="text-xl md:text-2xl font-semibold text-center mb-2 tracking-wide">
-        🌿 Presale Token Pool
+    <div className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 rounded-2xl shadow-xl p-6 max-w-md mx-auto mt-8 border border-green-300/30 backdrop-blur-md">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center text-green-100 tracking-wide mb-4">
+        🌿 <span className="text-green-300">Presale Token Pool</span>
       </h2>
-      <p className="text-sm text-center text-gray-200 mb-1 tracking-wider">
-        AVAILABLE
-      </p>
+
       {loading ? (
-        <div className="flex justify-center py-2">
-          <Loader2 className="animate-spin w-6 h-6 text-white" />
+        <div className="flex flex-col justify-center items-center py-6">
+          <div className="w-6 h-6 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-2 text-sm text-green-200">Loading available tokens...</p>
         </div>
       ) : (
-        <p className="text-4xl font-extrabold text-center tracking-tight">
-          {available ?? "--"} <span className="text-white">GLF</span>
-        </p>
+        <div className="text-center">
+          <p className="text-xs text-green-200 mb-1 tracking-widest uppercase">Available</p>
+          <p className="text-5xl font-extrabold text-white drop-shadow-md leading-tight">
+            {availableTokens ?? "--"}{" "}
+            <span className="text-green-300 font-bold tracking-tight">GLF</span>
+          </p>
+        </div>
       )}
     </div>
   );
-};
-
-export default TokenPoolInfo;
+}
