@@ -14,7 +14,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
+    <div className="min-h-screen bg-gray-900 p-6 flex flex-col items-center text-white">
       <h1 className="text-3xl font-bold text-green-400 mb-6">GLF Token Presale</h1>
 
       <WalletConnect onConnected={setAccount} />
