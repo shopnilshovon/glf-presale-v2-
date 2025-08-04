@@ -1,43 +1,43 @@
 import { useEffect, useState } from "react";
-import { Contract } from "ethers";
-import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import presaleAbi from "../abis/PresaleABI.json";
+import useContract from "../hooks/useContract";
 
-const TokenPoolInfo = ({ account, provider }) => {
-  const [available, setAvailable] = useState(null);
+export default function TokenPoolInfo({ account }) {
+  const [availableTokens, setAvailableTokens] = useState(null);
   const [error, setError] = useState(null);
 
-  const fetchAvailableTokens = async () => {
-    try {
-      if (!provider) return;
-
-      const signer = await provider.getSigner();
-      const presaleContract = new Contract(PRESALE_CONTRACT_ADDRESS, presaleAbi, signer);
-      const glfAmount = await presaleContract.getAvailableTokens();
-
-      setAvailable(Number(glfAmount));
-    } catch (err) {
-      setError("Failed to fetch available tokens.");
-      console.error(err);
-    }
-  };
+  const presaleContract = useContract();
 
   useEffect(() => {
-    fetchAvailableTokens();
-  }, [provider]);
+    const fetchTokens = async () => {
+      try {
+        if (!presaleContract) return;
+
+        const tokens = await presaleContract.getAvailableTokens();
+        setAvailableTokens(tokens.toString());
+      } catch (err) {
+        console.error("Error fetching available tokens:", err);
+        setError("Failed to fetch token pool info.");
+      }
+    };
+
+    fetchTokens();
+
+    const interval = setInterval(fetchTokens, 10000); // auto refresh every 10s
+    return () => clearInterval(interval);
+  }, [presaleContract]);
 
   return (
-    <div className="bg-gray-800 p-4 rounded-xl mt-6 w-full max-w-md text-center shadow-lg">
-      <h2 className="text-xl font-semibold mb-2">GLF Available in Presale Pool</h2>
+    <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg mt-4 text-center">
+      <h2 className="text-lg font-semibold mb-2">Token Pool</h2>
       {error ? (
         <p className="text-red-400">{error}</p>
-      ) : available !== null ? (
-        <p className="text-2xl text-green-400 font-bold">{available} GLF</p>
+      ) : availableTokens === null ? (
+        <p>Loading...</p>
       ) : (
-        <p className="text-gray-400">Loading...</p>
+        <p className="text-2xl font-bold text-green-400">
+          {Number(availableTokens).toLocaleString()} GLF Available
+        </p>
       )}
     </div>
   );
-};
-
-export default TokenPoolInfo;
+}
