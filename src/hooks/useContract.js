@@ -1,14 +1,15 @@
 import { useMemo } from "react";
 import { ethers } from "ethers";
-import ABI from "../utils/abi.json";
-import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
+import PresaleABI from "../abis/PresaleABI.json";
 
-export const useContract = () => {
+export const useContract = (contractAddress) => {
   return useMemo(() => {
-    if (typeof window === "undefined" || !window.ethereum) return null;
+    if (!window.ethereum) return null;
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = provider.getSigner();
-    return new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, signer);
-  }, []);
+    const contract = new ethers.Contract(contractAddress, PresaleABI, signer);
+
+    return contract;
+  }, [contractAddress]);
 };
