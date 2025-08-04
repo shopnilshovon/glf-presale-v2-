@@ -2,18 +2,10 @@ import { useState } from "react";
 import WalletConnect from "./components/WalletConnect";
 import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
-import Notification from "./components/Notification";
-
-// Triggering Vercel rebuild with this comment
+import Notification from "./components/Notification"; // ✅ this now works!
 
 export default function App() {
   const [account, setAccount] = useState(null);
-  const [notification, setNotification] = useState(null);
-
-  const handleNotification = (notif) => {
-    setNotification(notif);
-    setTimeout(() => setNotification(null), 5000);
-  };
 
   return (
     <div className="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
@@ -23,14 +15,9 @@ export default function App() {
 
       <TokenPoolInfo account={account} />
 
-      <BuyToken
-        account={account}
-        setNotification={handleNotification}
-      />
+      <BuyToken account={account} />
 
-      {notification && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
+      <Notification /> {/* ✅ No props needed */}
     </div>
   );
 }
