@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNotification } from "../utils/notification";
+import Notification from "./Notification";
 
 export default function WalletConnect({ onConnected }) {
   const [account, setAccount] = useState(null);
-  const { notifySuccess, notifyError } = useNotification();
+  const [notification, setNotification] = useState(null); // holds {type, message}
 
   useEffect(() => {
     if (window.ethereum) {
@@ -23,14 +23,20 @@ export default function WalletConnect({ onConnected }) {
     }
   }, [onConnected]);
 
+  const showNotification = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
+
   const switchToPolygon = async () => {
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x89" }], // 137 in hex
+        params: [{ chainId: "0x89" }],
       });
     } catch (switchError) {
-      // Chain not added
       if (switchError.code === 4902) {
         try {
           await window.ethereum.request({
@@ -50,17 +56,17 @@ export default function WalletConnect({ onConnected }) {
             ],
           });
         } catch (addError) {
-          notifyError("Could not add Polygon network");
+          showNotification("error", "Could not add Polygon network");
         }
       } else {
-        notifyError("Please switch to Polygon network manually");
+        showNotification("error", "Please switch to Polygon network manually");
       }
     }
   };
 
   const connectWallet = async () => {
     if (!window.ethereum) {
-      notifyError("MetaMask not found. Please install it.");
+      showNotification("error", "MetaMask not found. Please install it.");
       return;
     }
 
@@ -73,21 +79,25 @@ export default function WalletConnect({ onConnected }) {
 
       setAccount(accounts[0]);
       onConnected(accounts[0]);
-      notifySuccess("Wallet connected successfully!");
+      showNotification("success", "Wallet connected successfully!");
     } catch (err) {
-      notifyError("Connection failed!");
       console.error(err);
+      showNotification("error", "Connection failed!");
     }
   };
 
   const disconnectWallet = () => {
     setAccount(null);
     onConnected(null);
-    notifySuccess("Disconnected");
+    showNotification("success", "Disconnected");
   };
 
   return (
     <div className="mb-4 text-white">
+      {notification && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
+
       {account ? (
         <div className="flex items-center gap-4">
           <span className="text-sm">
