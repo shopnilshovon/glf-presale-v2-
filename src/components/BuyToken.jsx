@@ -8,27 +8,49 @@ export default function BuyToken({ account, setNotification }) {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [usdtBalance, setUsdtBalance] = useState("0");
+  const [glfBalance, setGlfBalance] = useState("0");
 
-  const fetchBalance = async () => {
+  const GLF_PRICE = 0.10; // 1 GLF = 0.10 USDT
+
+  const fetchBalances = async () => {
     if (!account || !window.ethereum) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
+    
     const usdt = new ethers.Contract(
       USDT_TOKEN_ADDRESS,
       ["function balanceOf(address) view returns (uint256)"],
       provider
     );
-    const balance = await usdt.balanceOf(account);
-    setUsdtBalance(ethers.utils.formatUnits(balance, 6));
+    const glf = new ethers.Contract(
+      PRESALE_CONTRACT_ADDRESS,
+      [
+        "function token() view returns (address)",
+        "function getAvailableTokens() public view returns (uint256)"
+      ],
+      provider
+    );
+
+    const usdtBal = await usdt.balanceOf(account);
+    setUsdtBalance(ethers.utils.formatUnits(usdtBal, 6));
+
+    const glfTokenAddress = await glf.token();
+    const glfToken = new ethers.Contract(
+      glfTokenAddress,
+      ["function balanceOf(address) view returns (uint256)"],
+      provider
+    );
+
+    const glfBal = await glfToken.balanceOf(account);
+    setGlfBalance(ethers.utils.formatUnits(glfBal, 18));
   };
 
   useEffect(() => {
-    fetchBalance();
+    fetchBalances();
   }, [account]);
 
   const estimateTokens = () => {
     const usdtValue = parseFloat(amount || "0");
-    const rate = 0.05;
-    if (usdtValue && rate) return (usdtValue / rate).toFixed(2);
+    if (usdtValue && GLF_PRICE) return (usdtValue / GLF_PRICE).toFixed(2);
     return "0.00";
   };
 
@@ -69,7 +91,7 @@ export default function BuyToken({ account, setNotification }) {
 
       setNotification({ type: "success", message: "✅ Token purchase successful!" });
       setAmount("");
-      fetchBalance();
+      await fetchBalances();
     } catch (error) {
       console.error("Purchase failed:", error);
       setNotification({
@@ -85,11 +107,20 @@ export default function BuyToken({ account, setNotification }) {
   return (
     <div className="w-full px-4 mt-6">
       <div className="bg-gray-800 rounded-2xl p-5 shadow-lg text-white">
-        <h2 className="text-xl font-semibold mb-3 text-center">🎯 Buy GLF Tokens</h2>
+        <h2 className="text-xl font-bold mb-4 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
 
-        <div className="mb-2 text-sm">
-          <p className="text-gray-400">Your USDT Balance:</p>
-          <p className="font-bold text-green-400">{usdtBalance} USDT</p>
+        <div className="mb-3 text-sm">
+          <p className="text-gray-400">🎯 USDT Balance:</p>
+          <p className="font-semibold text-green-400">{usdtBalance} USDT</p>
+        </div>
+
+        <div className="mb-3 text-sm">
+          <p className="text-gray-400">💰 Your GLF Balance:</p>
+          <p className="font-semibold text-yellow-400">{glfBalance} GLF</p>
+        </div>
+
+        <div className="mb-3 text-sm text-cyan-300">
+          <p>🧾 Rate: <span className="font-semibold text-white">1 GLF = {GLF_PRICE} USDT</span></p>
         </div>
 
         <input
