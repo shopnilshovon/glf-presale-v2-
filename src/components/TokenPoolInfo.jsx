@@ -26,17 +26,20 @@ export default function TokenPoolInfo() {
   }, []);
 
   return (
-    <div className="bg-green-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 max-w-md mx-auto mt-6 border border-green-400/30">
-      <h2 className="text-xl font-bold text-center text-white mb-2">
-        Presale Token Pool
+    <div className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 rounded-2xl shadow-xl p-6 max-w-md mx-auto mt-8 border border-green-300/30 backdrop-blur-md">
+      <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-green-100 tracking-wide mb-4">
+        🌿 Presale Token Pool
       </h2>
 
       {availableTokens === null ? (
-        <p className="text-yellow-300 text-center">Loading available tokens...</p>
+        <p className="text-yellow-300 text-center">Fetching tokens...</p>
       ) : (
-        <p className="text-lg text-white text-center">
-          <span className="font-semibold">{availableTokens}</span> GLF Available
-        </p>
+        <div className="text-center">
+          <p className="text-sm text-green-200 mb-1 tracking-wide uppercase">Available</p>
+          <p className="text-4xl sm:text-5xl font-bold text-white drop-shadow-md">
+            {availableTokens} <span className="text-green-300 font-semibold">GLF</span>
+          </p>
+        </div>
       )}
     </div>
   );
