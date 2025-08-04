@@ -30,25 +30,25 @@ export default function TokenPoolInfo() {
   }, []);
 
   return (
-    <div className="w-full px-4">
-      <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
+    <div className="w-full px-3 sm:px-4">
+      <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-xl p-4 sm:p-6 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
 
         {/* Glowing Top Title */}
-        <div className="absolute -top-3 left-5 bg-gradient-to-r from-green-500 via-green-300 to-green-500 text-black px-4 py-1 rounded-b-xl font-bold text-sm tracking-wider shadow-lg">
+        <div className="absolute -top-3 left-3 sm:left-5 bg-gradient-to-r from-green-500 via-green-300 to-green-500 text-black px-3 py-1 rounded-b-xl font-semibold text-[10px] sm:text-sm tracking-wider shadow-md">
           🌱 GLF TOKEN POOL
         </div>
 
         {/* Main content */}
-        <div className="flex flex-col items-center justify-center text-center mt-4">
+        <div className="flex flex-col items-center justify-center text-center mt-6 sm:mt-8">
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-6">
-              <div className="w-6 h-6 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-green-200 mt-3">Fetching Pool Info...</p>
+            <div className="flex flex-col items-center justify-center py-4">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-xs text-green-200 mt-2">Fetching Pool Info...</p>
             </div>
           ) : (
             <>
-              <p className="text-xs text-green-200 uppercase tracking-widest mb-1">Available</p>
-              <p className="text-5xl sm:text-6xl font-extrabold text-white drop-shadow-md">
+              <p className="text-[10px] sm:text-xs text-green-200 uppercase tracking-widest mb-1">Available</p>
+              <p className="text-4xl sm:text-5xl font-extrabold text-white drop-shadow-md">
                 {availableTokens ?? "--"}{" "}
                 <span className="text-green-400 font-bold tracking-tight">GLF</span>
               </p>
