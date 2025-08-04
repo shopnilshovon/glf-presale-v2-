@@ -10,15 +10,17 @@ export default function App() {
 
   const handleNotification = (notif) => {
     setNotification(notif);
-    setTimeout(() => setNotification(null), 4000);
+    setTimeout(() => setNotification(null), 5000);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6 text-center">
+    <div className="min-h-screen bg-gray-900 p-6 flex flex-col items-center">
       <h1 className="text-3xl font-bold text-green-400 mb-6">GLF Token Presale</h1>
 
       <WalletConnect onConnected={setAccount} />
-      <TokenPoolInfo account={account} />
+
+      <TokenPoolInfo />
+
       <BuyToken account={account} setNotification={handleNotification} />
 
       {notification && (
