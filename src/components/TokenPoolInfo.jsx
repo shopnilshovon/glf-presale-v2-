@@ -30,22 +30,22 @@ export default function TokenPoolInfo() {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 rounded-2xl shadow-xl p-6 max-w-md mx-auto mt-8 border border-green-300/30 backdrop-blur-md">
-      <h2 className="text-2xl sm:text-3xl font-bold text-center text-green-100 tracking-wide mb-4">
-        🌿 <span className="text-green-300">Presale Token Pool</span>
+    <div className="bg-green-800/60 border border-green-400/20 backdrop-blur-md rounded-xl shadow-md w-full max-w-sm mx-auto mt-6 p-4">
+      <h2 className="text-xl font-semibold text-center text-green-100 mb-3">
+        🌿 <span className="text-green-300">Token Pool</span>
       </h2>
 
       {loading ? (
-        <div className="flex flex-col justify-center items-center py-6">
-          <div className="w-6 h-6 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
-          <p className="mt-2 text-sm text-green-200">Loading available tokens...</p>
+        <div className="flex flex-col items-center justify-center py-4">
+          <div className="w-5 h-5 border-4 border-green-300 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm text-green-200 mt-2">Loading...</p>
         </div>
       ) : (
         <div className="text-center">
-          <p className="text-xs text-green-200 mb-1 tracking-widest uppercase">Available</p>
-          <p className="text-5xl font-extrabold text-white drop-shadow-md leading-tight">
+          <p className="text-xs text-green-200 mb-1 uppercase tracking-widest">Available</p>
+          <p className="text-3xl font-bold text-white">
             {availableTokens ?? "--"}{" "}
-            <span className="text-green-300 font-bold tracking-tight">GLF</span>
+            <span className="text-green-300 font-semibold">GLF</span>
           </p>
         </div>
       )}
