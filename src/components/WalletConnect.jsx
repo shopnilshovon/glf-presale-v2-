@@ -1,67 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-const WalletConnect = ({ onConnect }) => {
+const polygonNetwork = {
+  chainId: "0x89", // 137 in hex
+  chainName: "Polygon Mainnet",
+  nativeCurrency: {
+    name: "MATIC",
+    symbol: "MATIC",
+    decimals: 18
+  },
+  rpcUrls: ["https://polygon-rpc.com/"],
+  blockExplorerUrls: ["https://polygonscan.com/"]
+};
+
+export default function WalletConnect({ onConnected }) {
   const [account, setAccount] = useState(null);
-  const [networkError, setNetworkError] = useState("");
 
-  const polygonChain = {
-    chainId: "0x89", // 137 in hex
-    chainName: "Polygon Mainnet",
-    nativeCurrency: {
-      name: "MATIC",
-      symbol: "MATIC",
-      decimals: 18,
-    },
-    rpcUrls: ["https://polygon-rpc.com"],
-    blockExplorerUrls: ["https://polygonscan.com"],
-  };
-
-  const checkNetwork = async () => {
-    try {
-      const currentChainId = await window.ethereum.request({ method: "eth_chainId" });
-      if (currentChainId !== polygonChain.chainId) {
-        try {
-          await window.ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: polygonChain.chainId }],
-          });
-        } catch (switchError) {
-          if (switchError.code === 4902) {
-            await window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [polygonChain],
-            });
-          } else {
-            setNetworkError("Failed to switch to Polygon network.");
-          }
-        }
-      }
-    } catch (err) {
-      setNetworkError("Unable to detect network.");
-    }
-  };
-
-  const connectWallet = async () => {
-    if (!window.ethereum) {
-      alert("Please install MetaMask or use a Web3-enabled browser like Mises");
-      return;
-    }
-
-    try {
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-      setAccount(accounts[0]);
-      onConnect(accounts[0]);
-      await checkNetwork();
-    } catch (error) {
-      console.error("Wallet connect error:", error);
-    }
-  };
-
+  // Auto connect on load
   useEffect(() => {
     if (window.ethereum) {
+      window.ethereum.request({ method: 'eth_accounts' }).then((accounts) => {
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+          onConnected(accounts[0]);
+          checkNetwork();
+        }
+      });
+
       window.ethereum.on("accountsChanged", (accounts) => {
-        setAccount(accounts[0]);
-        onConnect(accounts[0]);
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+          onConnected(accounts[0]);
+        } else {
+          setAccount(null);
+          onConnected(null);
+        }
       });
 
       window.ethereum.on("chainChanged", () => {
@@ -70,23 +42,69 @@ const WalletConnect = ({ onConnect }) => {
     }
   }, []);
 
+  const checkNetwork = async () => {
+    const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    if (chainId !== polygonNetwork.chainId) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: polygonNetwork.chainId }]
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [polygonNetwork]
+          });
+        }
+      }
+    }
+  };
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts"
+        });
+        setAccount(accounts[0]);
+        onConnected(accounts[0]);
+        checkNetwork();
+      } catch (err) {
+        console.error("Wallet connect error:", err);
+      }
+    } else {
+      alert("Please install MetaMask!");
+    }
+  };
+
+  const disconnectWallet = () => {
+    setAccount(null);
+    onConnected(null);
+  };
+
   return (
-    <div className="text-center mb-4">
+    <div className="flex items-center justify-between bg-gray-800 text-white px-4 py-2 rounded-xl shadow-lg">
       {account ? (
-        <button className="bg-green-600 text-white px-4 py-2 rounded-full">
-          ✅ Connected: {account.slice(0, 6)}...{account.slice(-4)}
-        </button>
+        <div className="flex items-center gap-4">
+          <span className="text-sm">
+            Connected: {account.slice(0, 6)}...{account.slice(-4)}
+          </span>
+          <button
+            className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm"
+            onClick={disconnectWallet}
+          >
+            Disconnect
+          </button>
+        </div>
       ) : (
         <button
+          className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm font-medium"
           onClick={connectWallet}
-          className="bg-purple-700 text-white px-6 py-2 rounded-full hover:bg-purple-800 transition"
         >
           Connect Wallet
         </button>
       )}
-      {networkError && <p className="text-red-500 mt-2">{networkError}</p>}
     </div>
   );
-};
-
-export default WalletConnect;
+}
