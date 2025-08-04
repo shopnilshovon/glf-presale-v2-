@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
-import PresaleABI from "../abis/PresaleABI.json";
-import useContract from "../hooks/useContract";
+import ABI from "../abis/PresaleABI.json";
 
-const TokenPoolInfo = ({ account }) => {
-  const contract = useContract(PRESALE_CONTRACT_ADDRESS, PresaleABI);
+export default function TokenPoolInfo() {
   const [availableTokens, setAvailableTokens] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchAvailableTokens = async () => {
-      if (!contract) return;
+      if (!window.ethereum) return;
+
+      setLoading(true);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, ABI, provider);
 
       try {
-        setLoading(true);
         const tokens = await contract.getAvailableTokens();
         setAvailableTokens(ethers.utils.formatUnits(tokens, 18));
       } catch (error) {
-        console.error("Error fetching token pool info:", error);
-        setAvailableTokens(null);
+        console.error("Failed to fetch tokens:", error);
+        setAvailableTokens("Error");
       } finally {
         setLoading(false);
       }
     };
 
     fetchAvailableTokens();
-  }, [contract]);
+  }, []);
 
-  // ⬇️ ⬇️ ⬇️ Just replace this whole return section:
   return (
     <div className="w-full px-4">
       <div className="bg-green-900/40 backdrop-blur-md border border-green-600/20 shadow-xl rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all duration-300 hover:shadow-green-400/30">
@@ -60,6 +60,4 @@ const TokenPoolInfo = ({ account }) => {
       </div>
     </div>
   );
-};
-
-export default TokenPoolInfo;
+}
