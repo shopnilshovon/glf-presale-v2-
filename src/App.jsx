@@ -20,11 +20,16 @@ export default function App() {
       <div className="absolute top-0 -left-10 w-80 h-80 bg-green-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-lime-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
 
-      {/* Hero Title Section */}
-      <div className="text-center mb-12 px-4 max-w-xl sm:max-w-3xl">
-        <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 text-2xl sm:text-4xl md:text-5xl leading-tight drop-shadow-lg break-words">
-          🌿 Official GLF Token Presale – Join Early, Grow Green
+      {/* Hero Section */}
+      <div className="text-center mb-12 max-w-md sm:max-w-3xl px-2">
+        <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 drop-shadow-lg leading-tight text-balance">
+          <span className="text-2xl sm:text-4xl md:text-5xl break-words">
+            🌿 Official GLF Token Presale – Join Early, Grow Green
+          </span>
         </h1>
+        <p className="mt-4 text-sm sm:text-base text-gray-300">
+          Connect your wallet and purchase GLF tokens now – become a part of the green future!
+        </p>
       </div>
 
       {/* Main Card Section */}
