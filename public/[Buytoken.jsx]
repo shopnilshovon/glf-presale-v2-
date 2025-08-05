@@ -9,7 +9,7 @@ export default function BuyToken({ account, setNotification }) {
   const [status, setStatus] = useState("");
   const [usdtBalance, setUsdtBalance] = useState("0");
 
-  const GLF_PRICE = 0.10; // 1 GLF = 0.10 USDT
+  const GLF_PRICE = 0.10;
 
   const fetchBalances = async () => {
     if (!account || !window.ethereum) return;
@@ -33,6 +33,10 @@ export default function BuyToken({ account, setNotification }) {
     const usdtValue = parseFloat(amount || "0");
     if (usdtValue && GLF_PRICE) return (usdtValue / GLF_PRICE).toFixed(2);
     return "0.00";
+  };
+
+  const setMaxAmount = () => {
+    setAmount(usdtBalance);
   };
 
   const buy = async () => {
@@ -86,42 +90,51 @@ export default function BuyToken({ account, setNotification }) {
   };
 
   return (
-    <div className="w-full px-4 mt-6">
-      <div className="bg-gray-800 rounded-2xl p-5 shadow-lg text-white">
-        <h2 className="text-2xl font-bold mb-5 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
+    <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-0 mt-6">
+      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 shadow-lg text-white">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
 
         {/* USDT Balance */}
-        <div className="mb-6">
-          <p className="text-lg font-medium text-gray-300 mb-1">🎯 USDT Balance:</p>
-          <p className="text-2xl font-bold text-green-400">{usdtBalance} USDT</p>
+        <div className="mb-5">
+          <p className="text-sm sm:text-base text-gray-300">🎯 USDT Balance:</p>
+          <p className="text-lg sm:text-xl font-bold text-green-400">{usdtBalance} USDT</p>
         </div>
 
-        {/* Token Rate */}
-        <div className="mb-6">
-          <p className="text-lg font-semibold text-white">
-            🔔 <span className="text-green-300">PRESALE PRICE</span>   🔔
+        {/* Presale Rate */}
+        <div className="mb-5">
+          <p className="text-sm sm:text-base text-white font-semibold">
+            🔔 <span className="text-green-300">PRESALE PRICE</span>
           </p>
-          <p className="text-xl text-yellow-400 font-bold">1 GLF = 0.10$ USDT</p>
+          <p className="text-lg sm:text-xl font-bold text-yellow-400">1 GLF = 0.10 USDT</p>
         </div>
 
-        {/* Input Field */}
-        <input
-          type="number"
-          min="0"
-          placeholder="Enter USDT amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="w-full p-3 rounded-lg bg-gray-700 text-white mb-4 text-lg"
-        />
+        {/* Input + MAX */}
+        <div className="mb-5 relative">
+          <input
+            type="number"
+            min="0"
+            placeholder="Enter USDT amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className="w-full p-3 pr-20 rounded-lg bg-gray-800 text-white text-base sm:text-lg"
+          />
+          <button
+            onClick={setMaxAmount}
+            type="button"
+            className="absolute right-2 top-2 bottom-2 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xs sm:text-sm font-medium"
+          >
+            MAX
+          </button>
+        </div>
 
-        {/* Estimated */}
-        <div className="mb-4 text-base text-gray-300">
+        {/* Estimated Tokens */}
+        <div className="mb-5 text-sm sm:text-base text-gray-300">
           Estimated: <span className="text-yellow-400 font-semibold">{estimateTokens()} GLF</span>
         </div>
 
         {/* Loading Status */}
         {loading && (
-          <div className="mb-3 text-base text-blue-400 flex items-center gap-2">
+          <div className="mb-4 text-sm text-blue-400 flex items-center gap-2">
             <span className="animate-spin inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full"></span>
             {status === "approve" && "Approving USDT..."}
             {status === "confirming" && "Confirming purchase..."}
@@ -132,10 +145,10 @@ export default function BuyToken({ account, setNotification }) {
         <button
           onClick={buy}
           disabled={loading || !amount}
-          className={`w-full py-3 rounded-lg transition-all duration-300 font-semibold text-lg ${
+          className={`w-full py-3 rounded-lg transition-all duration-300 font-semibold text-base sm:text-lg ${
             loading || !amount
               ? "bg-gray-600 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
+              : "bg-green-600 hover:bg-green-700"
           }`}
         >
           {loading ? "Processing..." : "Buy Now"}
