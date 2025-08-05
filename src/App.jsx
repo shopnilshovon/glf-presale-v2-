@@ -3,6 +3,7 @@ import WalletConnect from "./components/WalletConnect";
 import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
+import Roadmap from "./components/Roadmap"; // ✅ Roadmap import
 
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -46,6 +47,9 @@ export default function App() {
           <BuyToken account={account} setNotification={handleNotification} />
         </div>
       </div>
+
+      {/* ✅ Roadmap Section */}
+      <Roadmap />
 
       {/* Notification */}
       {notification && (
