@@ -17,7 +17,7 @@ export default function Roadmap() {
           <ul className="list-disc list-inside space-y-1 text-gray-300">
             <li>✅ Deploy GreenLeaf Token (GLF) with 1,000,000 fixed supply</li>
             <li>✅ Develop GreenLeaf DApp with daily passive reward system</li>
-            <li>✅ Set 4% daily reward based on wallet-held GLF tokens</li>
+            <li>✅ Set 4% daily reward based on wallet-hold GLF tokens</li>
             <li>✅ Launch Public Presale Round 1</li>
             <li>✅ Total Presale Token Pool: 300,000 GLF (3 rounds)</li>
             <li>✅ Set reward cap at 2,000,000 total GLF supply</li>
