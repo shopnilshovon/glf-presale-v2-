@@ -91,7 +91,7 @@ export default function WalletConnect({ onConnected }) {
   };
 
   return (
-    <div className="mb-6 text-white w-full flex justify-center">
+    <div className="w-full flex justify-center items-center mt-6 relative">
       {notification && (
         <div className="absolute bottom-4 left-0 right-0 flex justify-center z-50">
           <Notification type={notification.type} message={notification.message} />
@@ -99,13 +99,13 @@ export default function WalletConnect({ onConnected }) {
       )}
 
       {account ? (
-        <div className="flex flex-col items-center md:flex-row md:gap-4 bg-gradient-to-r from-green-800 to-green-600 px-4 py-2 rounded-xl shadow-lg">
-          <span className="text-sm font-mono tracking-wide">
+        <div className="flex flex-col sm:flex-row items-center gap-3 bg-green-700/80 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-green-500 text-white">
+          <span className="text-sm font-mono break-all">
             ✅ Connected: {account.slice(0, 6)}...{account.slice(-4)}
           </span>
           <button
             onClick={disconnectWallet}
-            className="mt-2 md:mt-0 bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-full text-sm shadow-md transition"
+            className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-1.5 rounded-full text-sm transition duration-200"
           >
             Disconnect
           </button>
@@ -113,7 +113,7 @@ export default function WalletConnect({ onConnected }) {
       ) : (
         <button
           onClick={connectWallet}
-          className="bg-gradient-to-r from-green-500 to-lime-500 text-white font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transition transform duration-200"
+          className="bg-gradient-to-r from-green-500 to-lime-500 text-white font-semibold px-8 py-3 rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition transform duration-300"
         >
           🔗 Connect Wallet
         </button>
