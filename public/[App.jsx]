@@ -3,7 +3,7 @@ import WalletConnect from "./components/WalletConnect";
 import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
-import Roadmap from "./components/Roadmap";  // নতুন অংশ
+import Roadmap from "./components/Roadmap";  
 
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -25,7 +25,7 @@ export default function App() {
       <div className="text-center mb-12 max-w-md sm:max-w-3xl px-2">
         <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 drop-shadow-lg leading-tight text-balance">
           <span className="text-2xl sm:text-4xl md:text-5xl break-words">
-            🌿 Official GLF Token Presale – Join Early, Grow Green
+            🌿 GreenLeaf Presale 🌐
           </span>
         </h1>
         <p className="mt-4 text-sm sm:text-base text-gray-300">
