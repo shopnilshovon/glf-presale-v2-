@@ -14,29 +14,36 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 sm:p-6 flex flex-col items-center relative overflow-x-hidden">
-      
-      {/* Decorative blurred blob */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-green-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4 py-6 sm:px-6 flex flex-col items-center relative overflow-x-hidden">
 
-      <h1 className="text-4xl sm:text-5xl font-extrabold text-green-400 mt-6 mb-10 text-center tracking-tight drop-shadow-lg">
-        GLF Token Presale
+      {/* Decorative blurred blobs */}
+      <div className="absolute top-0 -left-10 w-80 h-80 bg-green-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-lime-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
+
+      {/* Hero Title */}
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 text-center mb-12 drop-shadow-lg">
+        🌿 Welcome to the GLF Token Presale
       </h1>
 
-      <div className="w-full max-w-2xl space-y-8">
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-6">
+      {/* Main Card Section */}
+      <div className="w-full max-w-3xl space-y-8">
+        {/* Wallet Connect */}
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
           <WalletConnect onConnected={setAccount} />
         </div>
 
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-6">
+        {/* Token Pool Info */}
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
           <TokenPoolInfo />
         </div>
 
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-6">
+        {/* Buy Token */}
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
           <BuyToken account={account} setNotification={handleNotification} />
         </div>
       </div>
 
+      {/* Notification popup */}
       {notification && (
         <div className="fixed bottom-4 right-4 z-50">
           <Notification type={notification.type} message={notification.message} />
