@@ -21,8 +21,10 @@ export default function App() {
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-lime-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
 
       {/* Hero Title */}
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 text-center mb-12 drop-shadow-lg">
-        🌿 Welcome to the GLF Token Presale
+      <h1 className="text-center font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 mb-12 drop-shadow-lg">
+        <span className="block text-3xl sm:text-5xl md:text-6xl leading-tight whitespace-nowrap">
+          🌿 Welcome to the <span className="inline-block">GLF Token Presale</span>
+        </span>
       </h1>
 
       {/* Main Card Section */}
