@@ -99,7 +99,7 @@ export default function BuyToken({ account, setNotification }) {
         {/* Token Rate */}
         <div className="mb-6">
           <p className="text-lg font-semibold text-white">
-            🌿 <span className="text-green-300">GLF Token Price</span>
+            🌿 <span className="text-green-300">GLF Presale Price</span>
           </p>
           <p className="text-xl text-yellow-400 font-bold">1 GLF = 0.10$ USDT</p>
         </div>
