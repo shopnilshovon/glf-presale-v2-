@@ -90,22 +90,22 @@ export default function BuyToken({ account, setNotification }) {
   };
 
   return (
-    <div className="w-full px-4 mt-6">
-      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-lg text-white">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
+    <div className="w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-0 mt-6">
+      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 shadow-lg text-white">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
 
         {/* USDT Balance */}
         <div className="mb-5">
-          <p className="text-base text-gray-300">🎯 USDT Balance:</p>
-          <p className="text-xl font-bold text-green-400">{usdtBalance} USDT</p>
+          <p className="text-sm sm:text-base text-gray-300">🎯 USDT Balance:</p>
+          <p className="text-lg sm:text-xl font-bold text-green-400">{usdtBalance} USDT</p>
         </div>
 
         {/* Presale Rate */}
         <div className="mb-5">
-          <p className="text-base text-white font-semibold">
+          <p className="text-sm sm:text-base text-white font-semibold">
             🔔 <span className="text-green-300">PRESALE PRICE</span>
           </p>
-          <p className="text-xl font-bold text-yellow-400">1 GLF = 0.10 USDT</p>
+          <p className="text-lg sm:text-xl font-bold text-yellow-400">1 GLF = 0.10 USDT</p>
         </div>
 
         {/* Input + MAX */}
@@ -116,19 +116,19 @@ export default function BuyToken({ account, setNotification }) {
             placeholder="Enter USDT amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full p-3 pr-20 rounded-lg bg-gray-800 text-white text-lg"
+            className="w-full p-3 pr-20 rounded-lg bg-gray-800 text-white text-base sm:text-lg"
           />
           <button
             onClick={setMaxAmount}
             type="button"
-            className="absolute right-2 top-2 bottom-2 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium"
+            className="absolute right-2 top-2 bottom-2 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xs sm:text-sm font-medium"
           >
             MAX
           </button>
         </div>
 
         {/* Estimated Tokens */}
-        <div className="mb-5 text-base text-gray-300">
+        <div className="mb-5 text-sm sm:text-base text-gray-300">
           Estimated: <span className="text-yellow-400 font-semibold">{estimateTokens()} GLF</span>
         </div>
 
@@ -145,7 +145,7 @@ export default function BuyToken({ account, setNotification }) {
         <button
           onClick={buy}
           disabled={loading || !amount}
-          className={`w-full py-3 rounded-lg transition-all duration-300 font-semibold text-lg ${
+          className={`w-full py-3 rounded-lg transition-all duration-300 font-semibold text-base sm:text-lg ${
             loading || !amount
               ? "bg-gray-600 cursor-not-allowed"
               : "bg-green-600 hover:bg-green-700"
