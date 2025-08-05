@@ -91,33 +91,45 @@ export default function WalletConnect({ onConnected }) {
   };
 
   return (
-    <div className="w-full flex justify-center items-center mt-6 relative">
+    <div className="w-full flex justify-center items-center mt-8 px-4 sm:px-0 relative">
       {notification && (
         <div className="absolute bottom-4 left-0 right-0 flex justify-center z-50">
           <Notification type={notification.type} message={notification.message} />
         </div>
       )}
 
-      {account ? (
-        <div className="flex flex-col sm:flex-row items-center gap-3 bg-green-700/80 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-green-500 text-white">
-          <span className="text-sm font-mono break-all">
-            ✅ Connected: {account.slice(0, 6)}...{account.slice(-4)}
-          </span>
-          <button
-            onClick={disconnectWallet}
-            className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-1.5 rounded-full text-sm transition duration-200"
-          >
-            Disconnect
-          </button>
+      <div className="bg-gradient-to-br from-green-900 via-black to-green-800 rounded-3xl p-1 sm:p-1.5 shadow-2xl w-full max-w-lg">
+        <div className="bg-black/70 backdrop-blur-md rounded-3xl px-6 py-5 sm:px-8 sm:py-6 flex flex-col sm:flex-row justify-between items-center gap-4 border border-green-700">
+          <div className="text-center sm:text-left">
+            <h2 className="text-lg sm:text-xl font-bold text-lime-400 animate-pulse tracking-wide">
+              {account
+                ? `✅ Connected`
+                : `🔗 Connect Your Wallet`}
+            </h2>
+            {account && (
+              <p className="text-sm text-white font-mono mt-1 break-all">
+                {account.slice(0, 6)}...{account.slice(-4)}
+              </p>
+            )}
+          </div>
+
+          {account ? (
+            <button
+              onClick={disconnectWallet}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md transition duration-300"
+            >
+              Disconnect
+            </button>
+          ) : (
+            <button
+              onClick={connectWallet}
+              className="bg-gradient-to-r from-lime-500 to-green-500 hover:from-green-400 hover:to-lime-400 text-black font-semibold text-sm px-6 py-2.5 rounded-full shadow-lg transition duration-300 hover:scale-105"
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
-      ) : (
-        <button
-          onClick={connectWallet}
-          className="bg-gradient-to-r from-green-500 to-lime-500 text-white font-semibold px-8 py-3 rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition transform duration-300"
-        >
-          🔗 Connect Wallet
-        </button>
-      )}
+      </div>
     </div>
   );
 }
