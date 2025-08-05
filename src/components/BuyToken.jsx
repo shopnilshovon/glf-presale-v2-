@@ -96,7 +96,7 @@ export default function BuyToken({ account, setNotification }) {
 
         {/* USDT Balance */}
         <div className="mb-5">
-          <p className="text-sm sm:text-base text-gray-300">🎯 USDT Balance:</p>
+          <p className="text-sm sm:text-base text-gray-300">🎯 USDT BALANCE:</p>
           <p className="text-xl sm:text-2xl font-bold text-green-400">{usdtBalance} USDT</p>
         </div>
 
@@ -105,7 +105,7 @@ export default function BuyToken({ account, setNotification }) {
           <p className="text-sm sm:text-base text-white font-semibold">
             🔔 <span className="text-green-300">PRESALE PRICE</span>
           </p>
-          <p className="text-xl sm:text-2xl font-bold text-yellow-400">1 GLF = 0.10 USDT</p>
+          <p className="text-xl sm:text-2xl font-bold text-yellow-400">1 GLF = 0.10$ USDT</p>
         </div>
 
         {/* Input + MAX Button */}
@@ -113,7 +113,7 @@ export default function BuyToken({ account, setNotification }) {
           <input
             type="number"
             min="0"
-            placeholder="Enter USDT amount"
+            placeholder="Enter USDT Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             className="w-full p-4 pr-24 rounded-lg bg-gray-800 text-white text-lg sm:text-xl placeholder-gray-400"
