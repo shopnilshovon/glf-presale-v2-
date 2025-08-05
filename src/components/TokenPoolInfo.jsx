@@ -31,17 +31,15 @@ export default function TokenPoolInfo() {
 
   return (
     <div className="w-full max-w-md mx-auto my-6">
-      <div className="relative rounded-2xl border border-green-500/30 bg-green-800/10 backdrop-blur-md shadow-lg overflow-hidden p-6 sm:p-8 transition duration-300 hover:shadow-green-400/30">
+      <div className="rounded-2xl border border-green-500/30 bg-green-800/10 backdrop-blur-md shadow-lg overflow-hidden p-6 sm:p-8 transition duration-300 hover:shadow-green-400/30">
 
-        {/* Ribbon Header */}
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <div className="bg-gradient-to-r from-green-400 via-green-300 to-green-400 text-black text-xs sm:text-sm font-bold px-4 py-1 rounded-b-xl shadow-md tracking-wider">
-            🌱 GLF POOL: ROUND 1
-          </div>
+        {/* Fixed Header Inside Box */}
+        <div className="bg-gradient-to-r from-green-400 via-green-300 to-green-400 text-black text-xs sm:text-sm font-bold px-4 py-1 rounded-xl shadow-md tracking-wider text-center mb-4 w-full">
+          🌱 GLF POOL: ROUND 1
         </div>
 
         {/* Pool Info */}
-        <div className="flex flex-col items-center justify-center pt-8">
+        <div className="flex flex-col items-center justify-center">
           {loading ? (
             <>
               <div className="w-8 h-8 border-4 border-green-300 border-t-transparent rounded-full animate-spin mb-3"></div>
