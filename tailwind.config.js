@@ -10,13 +10,15 @@ export default {
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
-        primary: '#10B981',  // GreenLeaf primary
-        secondary: '#1F2937', // dark gray
-        accent: '#34D399',    // softer green
+        primary: '#10B981',    // GreenLeaf primary
+        secondary: '#1F2937',  // dark gray
+        accent: '#34D399',     // softer green
+        dark: '#0f172a',       // dark background
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
         'blob': 'blob 7s infinite',
+        'pulse-slow': 'pulse 5s infinite',
       },
       keyframes: {
         fadeIn: {
