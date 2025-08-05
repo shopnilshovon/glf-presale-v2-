@@ -3,6 +3,7 @@ import WalletConnect from "./components/WalletConnect";
 import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
+import Roadmap from "./components/Roadmap";  // নতুন অংশ
 
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -45,6 +46,11 @@ export default function App() {
         <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
           <BuyToken account={account} setNotification={handleNotification} />
         </div>
+      </div>
+
+      {/* Roadmap Section Added */}
+      <div className="w-full max-w-3xl mt-12">
+        <Roadmap />
       </div>
 
       {/* Notification */}
