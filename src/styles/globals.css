@@ -8,22 +8,25 @@ body {
   color: white;
 }
 
-/* 🔥 Clean Fire animation background */
-@keyframes fire {
-  0% { background-position: 0 0; }
-  100% { background-position: -1000px 0; }
-}
-
-.fire-background {
-  background-image: url('https://i.imgur.com/o4g5t07.gif'); /* ✅ Clean, loopable fire */
-  background-size: cover;
-  background-repeat: repeat-x;
-  animation: fire 10s linear infinite;
+/* ✨ Clean glowing gradient bar without GIF/video */
+.glow-bar {
+  background: linear-gradient(90deg, #f97316, #facc15, #f97316); /* orange-yellow-orange */
+  background-size: 200% auto;
+  animation: shine 3s linear infinite;
   border-radius: 0.75rem; /* rounded-xl */
-  text-align: center;
   padding: 0.75rem 1rem; /* py-3 px-4 */
+  text-align: center;
   font-weight: 700; /* font-bold */
   font-size: 1.125rem; /* text-lg */
-  box-shadow: 0 0 20px rgba(255, 100, 0, 0.3); /* soft fire glow */
   color: white;
+  box-shadow: 0 0 15px rgba(252, 211, 77, 0.6); /* soft glow */
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
