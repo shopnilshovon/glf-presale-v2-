@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { USDT_TOKEN_ADDRESS, PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
 import ABI from "../abis/PresaleABI.json";
+import { motion } from "framer-motion";
 
 export default function BuyToken({ account, setNotification }) {
   const [amount, setAmount] = useState("");
@@ -90,25 +91,36 @@ export default function BuyToken({ account, setNotification }) {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 mt-10 flex justify-center">
-      <div className="w-full max-w-md sm:max-w-2xl bg-[#1c1e2b] border border-green-600/20 rounded-2xl p-5 sm:p-8 shadow-2xl backdrop-blur-md text-white transition-all duration-300">
-        <h2 className="text-xl sm:text-3xl font-bold mb-6 text-center text-blue-300">🚀 Buy GLF Tokens</h2>
+    <motion.div
+      className="w-full px-4 sm:px-6 mt-10 flex justify-center"
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.div
+        className="w-full max-w-md sm:max-w-2xl bg-[#1c1e2b] border border-green-600/20 rounded-2xl p-5 sm:p-8 shadow-2xl backdrop-blur-md text-white"
+        whileHover={{ scale: 1.01 }}
+        transition={{ duration: 0.3 }}
+      >
+        <h2 className="text-xl sm:text-3xl font-bold mb-6 text-center text-green-300 drop-shadow">
+          🚀 Buy GLF Tokens
+        </h2>
 
         {/* USDT Balance */}
         <div className="mb-5">
-          <p className="text-sm sm:text-base text-gray-300">🎯 USDT BALANCE:</p>
+          <p className="text-sm sm:text-base text-gray-300">🎯 Your USDT Balance</p>
           <p className="text-xl sm:text-2xl font-bold text-green-400">{usdtBalance} USDT</p>
         </div>
 
-        {/* Presale Rate */}
+        {/* Presale Price */}
         <div className="mb-5">
           <p className="text-sm sm:text-base text-white font-semibold">
-            🔔 <span className="text-green-300">PRESALE PRICE</span>
+            🔔 <span className="text-green-300">Presale Rate</span>
           </p>
-          <p className="text-xl sm:text-2xl font-bold text-yellow-400">1 GLF = 0.10$ USDT</p>
+          <p className="text-xl sm:text-2xl font-bold text-yellow-400">1 GLF = 0.10 USDT</p>
         </div>
 
-        {/* Input + MAX Button */}
+        {/* Input with Max Button */}
         <div className="mb-6 relative">
           <input
             type="number"
@@ -116,12 +128,12 @@ export default function BuyToken({ account, setNotification }) {
             placeholder="Enter USDT Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full p-4 pr-24 rounded-lg bg-gray-800 text-white text-lg sm:text-xl placeholder-gray-400"
+            className="w-full p-4 pr-24 rounded-lg bg-gray-800 text-white text-lg sm:text-xl placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
           />
           <button
             onClick={setMaxAmount}
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-1 sm:py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm sm:text-base font-medium"
+            className="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-1 sm:py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm sm:text-base font-medium shadow"
           >
             MAX
           </button>
@@ -129,7 +141,8 @@ export default function BuyToken({ account, setNotification }) {
 
         {/* Estimated Tokens */}
         <div className="mb-6 text-base sm:text-lg text-gray-300">
-          Estimated: <span className="text-yellow-400 font-semibold">{estimateTokens()} GLF</span>
+          Estimated GLF:{" "}
+          <span className="text-yellow-400 font-semibold">{estimateTokens()}</span>
         </div>
 
         {/* Loading Status */}
@@ -142,18 +155,19 @@ export default function BuyToken({ account, setNotification }) {
         )}
 
         {/* Buy Button */}
-        <button
+        <motion.button
           onClick={buy}
           disabled={loading || !amount}
-          className={`w-full py-4 rounded-xl transition-all duration-300 font-semibold text-lg ${
+          className={`w-full py-4 rounded-xl transition-all duration-300 font-semibold text-lg shadow-xl ${
             loading || !amount
               ? "bg-gray-600 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
+              : "bg-gradient-to-r from-green-500 to-lime-500 hover:from-green-600 hover:to-lime-600"
           }`}
+          whileTap={{ scale: 0.98 }}
         >
           {loading ? "Processing..." : "Buy Now"}
-        </button>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 }
