@@ -32,6 +32,13 @@ export default {
           '100%': { transform: 'translate(0px, 0px) scale(1)' },
         },
       },
+      boxShadow: {
+        glow: '0 0 10px rgba(16, 185, 129, 0.6), 0 0 20px rgba(16, 185, 129, 0.4)',
+        neon: '0 0 10px #10B981, 0 0 20px #10B981, 0 0 30px #10B981',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
     },
   },
   plugins: [],
