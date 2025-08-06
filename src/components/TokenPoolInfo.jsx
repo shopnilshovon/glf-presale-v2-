@@ -55,7 +55,7 @@ export default function TokenPoolInfo() {
 
         {/* Header */}
         <div className="relative z-10 text-xs sm:text-sm font-bold px-4 py-1 rounded-xl bg-gradient-to-r from-green-400 to-green-600 text-black shadow-md tracking-wider text-center mb-5 animate-pulse">
-          🌱 GLF POOL: ROUND 1
+          🌱 GREEN LEAF POOL: 100K GLF
         </div>
 
         {/* Token Info */}
