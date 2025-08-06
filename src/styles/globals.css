@@ -8,14 +8,14 @@ body {
   color: white;
 }
 
-/* 🔥 Fire animation background */
+/* 🔥 Clean Fire animation background */
 @keyframes fire {
   0% { background-position: 0 0; }
   100% { background-position: -1000px 0; }
 }
 
 .fire-background {
-  background-image: url('https://i.gifer.com/YkP4.gif'); /* 🔥 Animated fire GIF */
+  background-image: url('https://i.imgur.com/o4g5t07.gif'); /* 🎯 Clean fire animation */
   background-size: cover;
   background-repeat: repeat-x;
   animation: fire 10s linear infinite;
