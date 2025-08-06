@@ -3,7 +3,7 @@ import WalletConnect from "./components/WalletConnect";
 import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
-import Roadmap from "./components/Roadmap";  
+import Roadmap from "./components/Roadmap";
 
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -15,41 +15,39 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4 py-6 sm:px-6 flex flex-col items-center relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white px-4 py-8 flex flex-col items-center relative overflow-x-hidden">
 
-      {/* Decorative blurred blobs */}
-      <div className="absolute top-0 -left-10 w-80 h-80 bg-green-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-lime-400 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
+      {/* Decorative background blobs */}
+      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-green-500 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
+      <div className="absolute bottom-[-80px] right-[-80px] w-[300px] h-[300px] bg-lime-500 opacity-20 rounded-full blur-3xl animate-pulse -z-10"></div>
 
       {/* Hero Section */}
-      <div className="text-center mb-12 max-w-md sm:max-w-3xl px-2">
-        <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 drop-shadow-lg leading-tight text-balance">
-          <span className="text-2xl sm:text-4xl md:text-5xl break-words">
-            🌿 GreenLeaf Presale 🌐
-          </span>
+      <header className="text-center mb-10 max-w-2xl px-4">
+        <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-lime-400 text-3xl sm:text-5xl md:text-6xl leading-tight drop-shadow-lg">
+          🌿 GreenLeaf Presale 🌐
         </h1>
         <p className="mt-4 text-sm sm:text-base text-gray-300">
           Connect your wallet and purchase GLF tokens now – become a part of the green future!
         </p>
-      </div>
+      </header>
 
-      {/* Main Card Section */}
-      <div className="w-full max-w-3xl space-y-8">
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
+      {/* Main Cards Section */}
+      <main className="w-full max-w-4xl space-y-8">
+        <section className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-5 sm:p-8 transition duration-300 hover:shadow-2xl">
           <WalletConnect onConnected={setAccount} />
-        </div>
+        </section>
 
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
+        <section className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-5 sm:p-8 transition duration-300 hover:shadow-2xl">
           <TokenPoolInfo />
-        </div>
+        </section>
 
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 transition duration-300 hover:shadow-2xl">
+        <section className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-6 sm:p-10 transition duration-300 hover:shadow-2xl">
           <BuyToken account={account} setNotification={handleNotification} />
-        </div>
-      </div>
+        </section>
+      </main>
 
-      {/* Roadmap Section Added */}
-      <div className="w-full max-w-3xl mt-12">
+      {/* Roadmap */}
+      <div className="w-full max-w-4xl mt-16 px-2">
         <Roadmap />
       </div>
 
