@@ -6,6 +6,7 @@ import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
 import Roadmap from "./components/Roadmap";
 import SocialLinks from "./components/SocialLinks";
+import FireAnnouncement from "./components/FireAnnouncement"; // ✅ নতুন FireAnnouncement import
 
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -50,16 +51,8 @@ export default function App() {
           <WalletConnect onConnected={setAccount} />
         </motion.section>
 
-        {/* 🔥 Presale Animated Banner */}
-        <div className="relative my-6 rounded-xl overflow-hidden border border-lime-400 shadow-xl">
-          {/* 🔥 Fire Background Animation (custom CSS in globals.css) */}
-          <div className="absolute inset-0 z-0 fire-background opacity-60" />
-          <div className="relative z-10 p-4 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-pink-500 to-red-500 bg-clip-text text-transparent animate-pulse drop-shadow-md">
-              🌱 Presale Round 1 – Limited Time Only!
-            </h2>
-          </div>
-        </div>
+        {/* 🔥 Presale Announcement */}
+        <FireAnnouncement /> {/* ✅ Fire animation component */}
 
         <motion.section
           className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-5 sm:p-8 transition duration-300 hover:shadow-2xl"
