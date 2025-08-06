@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export default function FireAnnouncement() {
   return (
     <motion.div
-      className="fire-background text-center py-4 px-6 rounded-2xl shadow-lg border border-green-600"
+      className="text-center py-4 px-6 rounded-2xl shadow-lg border border-green-700 bg-black bg-opacity-70"
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
