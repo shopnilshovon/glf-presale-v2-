@@ -10,10 +10,15 @@ import SocialLinks from "./components/SocialLinks";
 export default function App() {
   const [account, setAccount] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [debugLogs, setDebugLogs] = useState([]);
 
   const handleNotification = (notif) => {
     setNotification(notif);
     setTimeout(() => setNotification(null), 5000);
+  };
+
+  const addLog = (log) => {
+    setDebugLogs((prevLogs) => [...prevLogs, `${new Date().toLocaleTimeString()}: ${log}`]);
   };
 
   return (
@@ -47,7 +52,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <WalletConnect onConnected={setAccount} />
+          <WalletConnect onConnected={setAccount} addLog={addLog} />
         </motion.section>
 
         <motion.section
@@ -57,7 +62,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <TokenPoolInfo />
+          <TokenPoolInfo addLog={addLog} />
         </motion.section>
 
         <motion.section
@@ -67,7 +72,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <BuyToken account={account} setNotification={handleNotification} />
+          <BuyToken account={account} setNotification={handleNotification} addLog={addLog} />
         </motion.section>
       </main>
 
@@ -97,6 +102,25 @@ export default function App() {
           <Notification type={notification.type} message={notification.message} />
         </div>
       )}
+
+      {/* 🐞 Debug Console Section */}
+      <motion.div
+        className="w-full max-w-4xl mt-10 px-4 py-4 bg-black/30 backdrop-blur-md border border-green-400/30 rounded-xl text-sm overflow-y-auto max-h-[200px]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        <h2 className="text-green-400 font-semibold mb-2">🔍 Debug Console</h2>
+        {debugLogs.length === 0 ? (
+          <p className="text-gray-400">No logs yet...</p>
+        ) : (
+          <ul className="list-disc pl-5 space-y-1">
+            {debugLogs.map((log, index) => (
+              <li key={index} className="text-gray-300">{log}</li>
+            ))}
+          </ul>
+        )}
+      </motion.div>
     </div>
   );
 }
