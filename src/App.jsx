@@ -4,6 +4,7 @@ import TokenPoolInfo from "./components/TokenPoolInfo";
 import BuyToken from "./components/BuyToken";
 import Notification from "./components/Notification";
 import Roadmap from "./components/Roadmap";
+import SocialLinks from "./components/SocialLinks"; // ✅ New Import
 
 export default function App() {
   const [account, setAccount] = useState(null);
@@ -46,12 +47,17 @@ export default function App() {
         </section>
       </main>
 
-      {/* Roadmap */}
+      {/* Roadmap Section */}
       <div className="w-full max-w-4xl mt-16 px-2">
         <Roadmap />
       </div>
 
-      {/* Notification */}
+      {/* ✅ Social Links Section */}
+      <div className="w-full max-w-4xl mt-10 px-2">
+        <SocialLinks />
+      </div>
+
+      {/* Notification Popup */}
       {notification && (
         <div className="fixed bottom-4 right-4 z-50">
           <Notification type={notification.type} message={notification.message} />
