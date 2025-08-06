@@ -115,9 +115,9 @@ export default function BuyToken({ account, setNotification }) {
         {/* Presale Price */}
         <div className="mb-5">
           <p className="text-sm sm:text-base text-white font-semibold">
-            🔔 <span className="text-green-300">Presale Rate</span>
+            🔔 <span className="text-green-300">Presale Price</span>
           </p>
-          <p className="text-xl sm:text-2xl font-bold text-yellow-400">1 GLF = 0.10 USDT</p>
+          <p className="text-xl sm:text-2xl font-bold text-yellow-400">1 GLF = 0.10$ USDT</p>
         </div>
 
         {/* Input with Max Button */}
