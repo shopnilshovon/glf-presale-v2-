@@ -15,8 +15,15 @@ body {
 }
 
 .fire-background {
-  background-image: url('https://i.imgur.com/o4g5t07.gif'); /* 🎯 Clean fire animation */
+  background-image: url('https://i.imgur.com/o4g5t07.gif'); /* ✅ Clean, loopable fire */
   background-size: cover;
   background-repeat: repeat-x;
   animation: fire 10s linear infinite;
+  border-radius: 0.75rem; /* rounded-xl */
+  text-align: center;
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  font-weight: 700; /* font-bold */
+  font-size: 1.125rem; /* text-lg */
+  box-shadow: 0 0 20px rgba(255, 100, 0, 0.3); /* soft fire glow */
+  color: white;
 }
