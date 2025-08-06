@@ -35,9 +35,9 @@ export default function TokenPoolInfo() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="w-full max-w-md mx-auto px-4 my-6 sm:my-8"
+      className="w-full px-4 my-6 sm:my-8 flex justify-center"
     >
-      <div className="relative overflow-hidden rounded-2xl border border-green-500/30 bg-green-900/10 backdrop-blur-lg shadow-2xl p-6 sm:p-8 transition-all duration-300 group hover:shadow-green-400/30">
+      <div className="w-full max-w-md sm:max-w-xl md:max-w-2xl bg-[#142d1e]/50 border border-green-500/20 backdrop-blur-xl rounded-2xl shadow-2xl p-6 sm:p-8 relative group hover:shadow-green-400/30 transition-all duration-300">
 
         {/* Glowing Blobs */}
         <motion.div
@@ -54,32 +54,31 @@ export default function TokenPoolInfo() {
         ></motion.div>
 
         {/* Header */}
-        <div className="relative z-10 bg-gradient-to-r from-green-400 via-green-300 to-green-400 text-black text-xs sm:text-sm font-bold px-4 py-1 rounded-xl shadow-md tracking-wider text-center mb-4 w-full animate-pulse">
+        <div className="relative z-10 text-xs sm:text-sm font-bold px-4 py-1 rounded-xl bg-gradient-to-r from-green-400 to-green-600 text-black shadow-md tracking-wider text-center mb-5 animate-pulse">
           🌱 GLF POOL: ROUND 1
         </div>
 
         {/* Token Info */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-2">
+        <div className="relative z-10 text-center space-y-2">
           {loading ? (
             <>
               <motion.div
-                className="w-8 h-8 border-4 border-green-300 border-t-transparent rounded-full animate-spin"
+                className="w-8 h-8 border-4 border-green-300 border-t-transparent rounded-full animate-spin mx-auto"
                 aria-label="loading"
               />
               <p className="text-green-200 text-sm sm:text-base">Fetching pool info...</p>
             </>
           ) : (
             <>
-              <p className="text-green-300 text-sm sm:text-base mb-1">Available</p>
+              <p className="text-green-300 text-sm sm:text-base">Available</p>
               <motion.h3
                 key={availableTokens}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 200, damping: 12 }}
-                className="text-4xl sm:text-5xl font-extrabold text-white drop-shadow-sm"
+                className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white"
               >
-                {availableTokens ?? "--"}{" "}
-                <span className="text-green-400">GLF</span>
+                {availableTokens ?? "--"} <span className="text-green-400">GLF</span>
               </motion.h3>
               <p className="text-xs sm:text-sm text-gray-400">
                 Tokens left in presale pool
