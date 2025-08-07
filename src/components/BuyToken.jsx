@@ -130,22 +130,22 @@ export default function BuyToken({ account, setNotification }) {
 
         {/* 🪙 Balance Box */}
         <motion.div
-          className="mb-6 grid grid-cols-2 gap-6 bg-gradient-to-r from-green-800/60 to-green-600/40 rounded-xl p-5 shadow-lg border border-green-400/30"
+          className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gradient-to-r from-green-800/60 to-green-600/40 rounded-xl p-5 shadow-lg border border-green-400/30"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <div className="flex flex-col items-center">
             <p className="text-sm text-gray-300">🎯 Your USDT Balance</p>
-            <p className="text-2xl font-bold text-green-400">
-              {parseFloat(usdtBalance).toFixed(4)} USDT
+            <p className="text-2xl font-bold text-white">
+              {parseFloat(usdtBalance).toFixed(2)} USDT
             </p>
           </div>
 
           <div className="flex flex-col items-center">
             <p className="text-sm text-gray-300">🌿 Your GLF Balance</p>
-            <p className="text-2xl font-bold text-yellow-400">
-              {parseFloat(glfBalance).toFixed(4)} GLF
+            <p className="text-2xl font-bold text-green-400">
+              {parseFloat(glfBalance).toFixed(2)} GLF
             </p>
           </div>
         </motion.div>
