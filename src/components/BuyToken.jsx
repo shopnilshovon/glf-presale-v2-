@@ -148,7 +148,7 @@ export default function BuyToken({ account, setNotification }) {
           </div>
         </motion.div>
 
-        {/* 🎯 Presale Price - Updated Design */}
+        {/* 🎯 Presale Price */}
         <motion.div
           className="mb-6 text-center"
           initial={{ opacity: 0, y: 10 }}
@@ -164,15 +164,20 @@ export default function BuyToken({ account, setNotification }) {
           </p>
         </motion.div>
 
-        {/* 💸 Input Field */}
+        {/* 💸 Input Field with $ display */}
         <div className="mb-6 relative">
-          <input
-            type="number"
-            placeholder="Enter USDT Amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full p-4 pr-24 rounded-lg bg-gray-800 text-white text-lg placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 focus-within:ring-2 focus-within:ring-green-500 px-4 py-3">
+            <input
+              type="number"
+              placeholder="Enter USDT Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="flex-grow bg-transparent text-white text-lg placeholder-gray-400 focus:outline-none"
+            />
+            <span className="text-white text-lg ml-2">
+              ${parseFloat(amount || 0).toFixed(2)}
+            </span>
+          </div>
           <button
             onClick={setMaxAmount}
             className="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium"
