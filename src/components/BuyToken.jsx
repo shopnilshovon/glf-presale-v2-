@@ -159,7 +159,7 @@ export default function BuyToken({ account, setNotification }) {
             🔔 <span className="text-green-300">Presale Price</span>
           </p>
           <p className="text-2xl sm:text-3xl font-bold">
-            <span className="text-green-400">1 (GLF)</span>
+            <span className="text-green-400">1 GLF</span>
             <span className="text-white"> = 0.10$ USDT</span>
           </p>
         </motion.div>
