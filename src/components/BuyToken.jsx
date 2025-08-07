@@ -18,7 +18,6 @@ export default function BuyToken({ account, setNotification }) {
 
   const GLF_PRICE = 0.10;
 
-  // 👉 Fetch balances
   const fetchBalances = async () => {
     if (!account || !window.ethereum) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -61,7 +60,6 @@ export default function BuyToken({ account, setNotification }) {
 
   const setMaxAmount = () => setAmount(usdtBalance);
 
-  // 🛒 Buy Token Logic
   const buy = async () => {
     if (!account) {
       setNotification({ type: "error", message: "Wallet not connected" });
@@ -128,7 +126,7 @@ export default function BuyToken({ account, setNotification }) {
           🚀 Buy GLF Tokens
         </h2>
 
-        {/* 🪙 Balance Box */}
+        {/* 💼 Balance Box */}
         <motion.div
           className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gradient-to-r from-green-800/60 to-green-600/40 rounded-xl p-5 shadow-lg border border-green-400/30"
           initial={{ opacity: 0, y: 20 }}
@@ -150,15 +148,21 @@ export default function BuyToken({ account, setNotification }) {
           </div>
         </motion.div>
 
-        {/* 💰 Presale Info */}
-        <div className="mb-5">
-          <p className="text-sm text-white font-semibold">
+        {/* 🎯 Presale Price - Updated Design */}
+        <motion.div
+          className="mb-6 text-center"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <p className="text-base sm:text-lg text-white font-medium mb-1">
             🔔 <span className="text-green-300">Presale Price</span>
           </p>
-          <p className="text-xl font-bold text-yellow-400">
-            1 GLF = 0.10 USDT
+          <p className="text-2xl sm:text-3xl font-bold">
+            <span className="text-green-400">1 (GLF)</span>
+            <span className="text-white"> = 0.10$ USDT</span>
           </p>
-        </div>
+        </motion.div>
 
         {/* 💸 Input Field */}
         <div className="mb-6 relative">
