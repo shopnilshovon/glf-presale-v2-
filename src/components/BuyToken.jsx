@@ -1,30 +1,76 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { USDT_TOKEN_ADDRESS, PRESALE_CONTRACT_ADDRESS } from "../utils/constants";
+import { USDT_TOKEN_ADDRESS, PRESALE_CONTRACT_ADDRESS, GLF_TOKEN_ADDRESS } from "../utils/constants";
 import ABI from "../abis/PresaleABI.json";
-import { motion } from "framer-motion";
+import GLF_ABI from "../abis/GLFTokenABI.json"; // ERC20 ABI for GLF token balance fetch
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function BuyToken({ account, setNotification }) {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [usdtBalance, setUsdtBalance] = useState("0");
+  const [glfBalance, setGlfBalance] = useState("0");
+  const [displayGlfBalance, setDisplayGlfBalance] = useState(0);
 
   const GLF_PRICE = 0.10;
 
+  // Fetch both USDT and GLF balances
   const fetchBalances = async () => {
     if (!account || !window.ethereum) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
+    // USDT contract (6 decimals)
     const usdt = new ethers.Contract(
       USDT_TOKEN_ADDRESS,
       ["function balanceOf(address) view returns (uint256)"],
       provider
     );
 
-    const usdtBal = await usdt.balanceOf(account);
-    setUsdtBalance(ethers.utils.formatUnits(usdtBal, 6));
+    // GLF contract (assume 18 decimals)
+    const glf = new ethers.Contract(
+      GLF_TOKEN_ADDRESS,
+      ["function balanceOf(address) view returns (uint256)"],
+      provider
+    );
+
+    try {
+      const [usdtBalRaw, glfBalRaw] = await Promise.all([
+        usdt.balanceOf(account),
+        glf.balanceOf(account),
+      ]);
+      const usdtBal = ethers.utils.formatUnits(usdtBalRaw, 6);
+      const glfBal = ethers.utils.formatUnits(glfBalRaw, 18);
+
+      setUsdtBalance(usdtBal);
+      setGlfBalance(glfBal);
+    } catch (err) {
+      console.error("Failed to fetch balances:", err);
+    }
   };
+
+  // Animate GLF balance count up effect when glfBalance changes
+  useEffect(() => {
+    let start = 0;
+    const end = parseFloat(glfBalance);
+    if (isNaN(end)) return;
+
+    const duration = 1000; // animation duration ms
+    const increment = end / (duration / 30); // update every 30ms
+
+    let current = start;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= end) {
+        setDisplayGlfBalance(end);
+        clearInterval(timer);
+      } else {
+        setDisplayGlfBalance(current);
+      }
+    }, 30);
+
+    return () => clearInterval(timer);
+  }, [glfBalance]);
 
   useEffect(() => {
     fetchBalances();
@@ -39,6 +85,8 @@ export default function BuyToken({ account, setNotification }) {
   const setMaxAmount = () => {
     setAmount(usdtBalance);
   };
+
+  // ... (buy function stays same)
 
   const buy = async () => {
     if (!account) {
@@ -106,11 +154,35 @@ export default function BuyToken({ account, setNotification }) {
           🚀 Buy GLF Tokens
         </h2>
 
-        {/* USDT Balance */}
-        <div className="mb-5">
-          <p className="text-sm sm:text-base text-gray-300">🎯 Your USDT Balance</p>
-          <p className="text-xl sm:text-2xl font-bold text-green-400">{usdtBalance} USDT</p>
-        </div>
+        {/* Balance Box with animation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="mb-6 grid grid-cols-2 gap-6 bg-gradient-to-r from-green-800/60 to-green-600/40 rounded-xl p-5 shadow-lg border border-green-400/30"
+        >
+          {/* USDT Balance */}
+          <div className="flex flex-col items-center">
+            <p className="text-sm sm:text-base text-gray-300">🎯 Your USDT Balance</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-400">
+              {parseFloat(usdtBalance).toFixed(4)} USDT
+            </p>
+          </div>
+
+          {/* GLF Balance */}
+          <div className="flex flex-col items-center">
+            <p className="text-sm sm:text-base text-gray-300">🌿 Your GLF Balance</p>
+            <motion.p
+              key={displayGlfBalance} // rerun animation on value change
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-2xl sm:text-3xl font-bold text-yellow-400"
+            >
+              {displayGlfBalance.toFixed(4)} GLF
+            </motion.p>
+          </div>
+        </motion.div>
 
         {/* Presale Price */}
         <div className="mb-5">
