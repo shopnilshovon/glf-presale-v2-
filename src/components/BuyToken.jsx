@@ -164,29 +164,33 @@ export default function BuyToken({ account, setNotification }) {
           </p>
         </motion.div>
 
-        {/* 💸 Input Field with $ display */}
-        <div className="mb-6 relative">
-          <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 focus-within:ring-2 focus-within:ring-green-500 px-4 py-3">
+        {/* 💸 Input Field (fixed version) */}
+        <div className="mb-4">
+          <label className="block text-sm sm:text-base text-gray-300 mb-2">
+            USDT Amount
+          </label>
+          <div className="relative flex items-center">
             <input
               type="number"
               placeholder="Enter USDT Amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="flex-grow bg-transparent text-white text-lg placeholder-gray-400 focus:outline-none"
+              className="w-full bg-gray-800 text-white text-base sm:text-lg placeholder-gray-400 border border-gray-700 rounded-lg py-3 px-4 pr-20 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-            <span className="text-white text-lg ml-2">
-              ${parseFloat(amount || 0).toFixed(2)}
-            </span>
+            <button
+              onClick={setMaxAmount}
+              className="absolute right-3 top-1/2 -translate-y-1/2 px-3 sm:px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xs sm:text-sm font-medium"
+            >
+              MAX
+            </button>
           </div>
-          <button
-            onClick={setMaxAmount}
-            className="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium"
-          >
-            MAX
-          </button>
+          {/* 💲USDT amount below input */}
+          <div className="mt-2 text-right text-sm sm:text-base text-gray-300">
+            ~ ${parseFloat(amount || 0).toFixed(2)}
+          </div>
         </div>
 
-        {/* 📈 Estimation */}
+        {/* 📈 Estimated GLF */}
         <div className="mb-6 text-base text-gray-300">
           Estimated GLF:{" "}
           <span className="text-yellow-400 font-semibold">{estimateGLF()}</span>
