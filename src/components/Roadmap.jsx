@@ -15,14 +15,14 @@ export default function Roadmap() {
             🌱 Phase 1: Project Initialization (Current Stage)
           </h3>
           <ul className="list-disc list-inside space-y-1 text-gray-300">
-            <li>✅ Deploy GreenLeaf Token (GLF) with 1,000,000 fixed supply</li>
+            <li>✅ Deploy GreenLeaf Token (GLF) with 5,000,000 fixed supply</li>
             <li>✅ Develop GreenLeaf DApp with daily passive reward system</li>
             <li>✅ Set 4% daily reward based on wallet-hold GLF tokens</li>
             <li>✅ Launch Public Presale Round 1</li>
-            <li>✅ Total Presale Token Pool: 300,000 GLF (3 rounds)</li>
-            <li>✅ Set reward cap at 2,000,000 total GLF supply</li>
+            <li>✅ Total Presale Token Pool: 500,000 GLF (3 rounds)</li>
+            <li>✅ Set reward cap at 6,500,000 total GLF supply</li>
             <li className="italic text-sm mt-1">
-              Reward & interest will stop permanently after reaching 2M
+              Reward & interest will stop permanently after reaching 6.5M
             </li>
           </ul>
         </div>
@@ -45,13 +45,13 @@ export default function Roadmap() {
             <div>
               <h4 className="font-semibold text-orange-400">🟠 Round 2</h4>
               <p className="text-gray-300 ml-4">Token Price: $0.15 USDT</p>
-              <p className="text-gray-300 ml-4">Token Pool: 100,000 GLF</p>
+              <p className="text-gray-300 ml-4">Token Pool: 150,000 GLF</p>
             </div>
 
             <div>
               <h4 className="font-semibold text-purple-500">🟣 Round 3</h4>
               <p className="text-gray-300 ml-4">Token Price: $0.20 USDT</p>
-              <p className="text-gray-300 ml-4">Token Pool: 100,000 GLF</p>
+              <p className="text-gray-300 ml-4">Token Pool: 250,000 GLF</p>
             </div>
 
             <p className="italic text-sm mt-2">
@@ -70,7 +70,7 @@ export default function Roadmap() {
           <ul className="list-disc list-inside space-y-1 text-gray-300">
             <li>✅ Launch on DEX (Uniswap / Quickswap)</li>
             <li>✅ Initial DEX Token Price: $0.30 USDT</li>
-            <li>✅ Provide 300,000 GLF as liquidity to DEX</li>
+            <li>✅ Provide 1,000,000 GLF as liquidity to DEX</li>
           </ul>
         </div>
 
@@ -83,10 +83,10 @@ export default function Roadmap() {
           </h3>
           <ul className="list-disc list-inside space-y-1 text-gray-300">
             <li>🎉 Airdrop Campaign</li>
-            <li>Total Airdrop Pool: 200,000 GLF</li>
+            <li>Total Airdrop Pool: 2,000,000 GLF</li>
             <li>Distribution based on community participation & task completion</li>
             <li>💥 DEX Trade Volume Event</li>
-            <li>Bonus reward pool: 50,000 GLF</li>
+            <li>Bonus reward pool: 250,000 GLF</li>
             <li>For high-volume DEX traders & active users</li>
           </ul>
         </div>
@@ -119,7 +119,7 @@ export default function Roadmap() {
             🔚 End of Reward Phase
           </h3>
           <p className="text-gray-300">
-            When total GLF supply reaches 2,000,000, the daily mining & reward system will be permanently disabled
+            When total GLF supply reaches 6,500,000, the daily mining & reward system will be permanently disabled
             <br />
             Focus shifts to long-term growth, exchange listings, and utility creation
           </p>
